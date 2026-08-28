@@ -60,20 +60,27 @@ export default async function handler(req, res) {
     // GET /api/statistics - Retrieve real global statistics
     // --------------------------------------------------------------------------
     if (req.method === 'GET') {
-      const { data, error } = await supabase
-        .from('site_statistics')
-        .select('visitors, resumes_created, resumes_downloaded')
-        .eq('id', 1)
-        .single();
+      const [visitorsResult, createdResult, downloadedResult] = await Promise.all([
+        supabase.from('unique_visitors').select('*', { count: 'exact', head: true }),
+        supabase
+          .from('statistic_events')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_type', 'resume_created'),
+        supabase
+          .from('statistic_events')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_type', 'resume_downloaded')
+      ]);
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Supabase query error:', error);
+      const queryError = visitorsResult.error || createdResult.error || downloadedResult.error;
+      if (queryError) {
+        console.error('Supabase query error:', queryError);
         return res.status(500).json({ error: 'Failed to retrieve site statistics' });
       }
 
-      const visitors = data ? Number(data.visitors) || 0 : 0;
-      const resumesCreated = data ? Number(data.resumes_created) || 0 : 0;
-      const resumesDownloaded = data ? Number(data.resumes_downloaded) || 0 : 0;
+      const visitors = visitorsResult.count || 0;
+      const resumesCreated = createdResult.count || 0;
+      const resumesDownloaded = downloadedResult.count || 0;
 
       // Cache headers for performance and database efficiency
       res.setHeader('Cache-Control', 'public, s-maxage=5, stale-while-revalidate=15');
