@@ -1,9 +1,9 @@
 /**
  * Real Supabase & Vercel-backed Statistics Service
  * 
- * Interacts exclusively with the serverless endpoint `/api/statistics`.
- * Global statistics are stored in Supabase PostgreSQL (zero fake/mock numbers).
- * LocalStorage is used ONLY to store an anonymous visitor identifier.
+ * Interacts with the serverless endpoint `/api/statistics`.
+ * Global statistics are stored in Supabase PostgreSQL (zero mock/fake numbers).
+ * LocalStorage is used only to store an anonymous visitor identifier.
  */
 
 const STORAGE_KEYS = {
@@ -11,12 +11,16 @@ const STORAGE_KEYS = {
   VISITOR_EVENT_SENT: 'resumeforge_visitor_event_sent_session'
 };
 
-// Generate a random cryptographically secure or pseudo-random UUID
-function generateUUID() {
+// Generates a valid RFC 4122 v4 UUID
+export function generateUUID() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  return 'id_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now().toString(36);
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 /**
@@ -67,16 +71,16 @@ export async function getStatistics() {
 
 /**
  * Tracks a unique anonymous visitor to the platform.
- * Sends the anonymous identifier to /api/statistics to be hashed and recorded.
+ * @param {string} [customVisitorId] - Optional visitor ID override
  */
-export async function trackVisitor() {
+export async function trackVisitor(customVisitorId) {
   try {
-    // Prevent sending duplicate network requests within the same browser tab session
+    // Prevent redundant network calls within the same browser tab session
     if (sessionStorage.getItem(STORAGE_KEYS.VISITOR_EVENT_SENT)) {
       return null;
     }
 
-    const visitorId = getOrCreateAnonymousVisitorId();
+    const visitorId = customVisitorId || getOrCreateAnonymousVisitorId();
     sessionStorage.setItem(STORAGE_KEYS.VISITOR_EVENT_SENT, 'true');
 
     const res = await fetch('/api/statistics', {
@@ -101,11 +105,11 @@ export async function trackVisitor() {
 
 /**
  * Tracks a meaningful resume creation event.
- * @param {string} eventId - Unique ID for this resume creation to ensure idempotency
+ * @param {string} [eventId] - Valid RFC 4122 UUID for this resume creation
  */
 export async function trackResumeCreated(eventId) {
   try {
-    const finalEventId = eventId || ('create_' + generateUUID());
+    const finalEventId = eventId || generateUUID();
     const visitorId = getOrCreateAnonymousVisitorId();
 
     const res = await fetch('/api/statistics', {
@@ -131,11 +135,11 @@ export async function trackResumeCreated(eventId) {
 
 /**
  * Tracks a successful PDF resume download.
- * @param {string} eventId - Unique ID for this download attempt
+ * @param {string} [eventId] - Valid RFC 4122 UUID for this download attempt
  */
 export async function trackResumeDownloaded(eventId) {
   try {
-    const finalEventId = eventId || ('dl_' + generateUUID());
+    const finalEventId = eventId || generateUUID();
     const visitorId = getOrCreateAnonymousVisitorId();
 
     const res = await fetch('/api/statistics', {

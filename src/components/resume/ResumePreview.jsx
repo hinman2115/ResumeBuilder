@@ -4,7 +4,7 @@ import { useResume } from '../../hooks/useResume';
 import { TemplateRenderer } from './TemplateRenderer';
 import { exportResumeToPDF } from '../../utils/pdf';
 import { Button } from '../common/Button';
-import { trackResumeDownloaded } from '../../services/statistics';
+import { trackResumeDownloaded, generateUUID } from '../../services/statistics';
 
 export const ResumePreview = () => {
   const { resumeData, showToast } = useResume();
@@ -22,7 +22,7 @@ export const ResumePreview = () => {
 
     const sanitizedName = (resumeData.personal?.fullName || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_');
     const fileName = `${sanitizedName}_Resume.pdf`;
-    const downloadEventId = 'dl_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+    const downloadEventId = generateUUID();
 
     try {
       await exportResumeToPDF('resume-export-container', {
@@ -32,7 +32,7 @@ export const ResumePreview = () => {
         },
         onComplete: async () => {
           setIsExporting(false);
-          // Track genuine successful download event in Supabase
+          // Track genuine successful download event in Supabase with standard UUID
           await trackResumeDownloaded(downloadEventId);
           showToast('PDF downloaded successfully!', 'success');
         },

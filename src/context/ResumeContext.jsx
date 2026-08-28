@@ -7,7 +7,7 @@ import {
   clearResumeFromStorage,
   getLastSavedTimestamp
 } from '../utils/storage';
-import { trackResumeCreated } from '../services/statistics';
+import { trackResumeCreated, generateUUID } from '../services/statistics';
 
 const ResumeContext = createContext(undefined);
 
@@ -35,7 +35,7 @@ export const ResumeProvider = ({ children }) => {
       hasTrackedCreationRef.current = true;
       let resumeId = sessionStorage.getItem('resumeforge_current_session_resume_id');
       if (!resumeId) {
-        resumeId = 'res_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+        resumeId = generateUUID();
         sessionStorage.setItem('resumeforge_current_session_resume_id', resumeId);
       }
       trackResumeCreated(resumeId);
@@ -221,7 +221,7 @@ export const ResumeProvider = ({ children }) => {
   const loadSampleData = useCallback(() => {
     setResumeData(defaultResumeData);
     saveResumeToStorage(defaultResumeData);
-    const resumeId = 'sample_' + Date.now().toString(36);
+    const resumeId = generateUUID();
     trackResumeCreated(resumeId);
     showToast('Loaded sample resume data', 'success');
   }, [showToast]);
@@ -242,7 +242,7 @@ export const ResumeProvider = ({ children }) => {
     // Explicit save event
     let resumeId = sessionStorage.getItem('resumeforge_current_session_resume_id');
     if (!resumeId) {
-      resumeId = 'res_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+      resumeId = generateUUID();
       sessionStorage.setItem('resumeforge_current_session_resume_id', resumeId);
     }
     trackResumeCreated(resumeId);

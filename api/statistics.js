@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
+// Standard UUID format validator (v1, v4, etc.)
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 // Initialize Supabase admin client (server-side only with service_role)
 function getSupabaseClient() {
   const supabaseUrl = process.env.SUPABASE_URL?.trim();
@@ -25,13 +28,18 @@ function getSupabaseClient() {
 
 // Helper to hash anonymous visitor identifiers
 function hashVisitorId(rawId) {
-  if (!rawId) return null;
-  return crypto.createHash('sha256').update(rawId.trim()).digest('hex');
+  if (!rawId || typeof rawId !== 'string') return null;
+  const trimmed = rawId.trim();
+  if (!trimmed) return null;
+  return crypto.createHash('sha256').update(trimmed).digest('hex');
 }
 
 export default async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS Configuration: allow same origin or standard requests
+  const origin = req.headers.origin || '';
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -49,7 +57,7 @@ export default async function handler(req, res) {
 
   try {
     // --------------------------------------------------------------------------
-    // GET /api/statistics - Retrieve global statistics
+    // GET /api/statistics - Retrieve real global statistics
     // --------------------------------------------------------------------------
     if (req.method === 'GET') {
       const { data, error } = await supabase
@@ -67,7 +75,7 @@ export default async function handler(req, res) {
       const resumesCreated = data ? Number(data.resumes_created) || 0 : 0;
       const resumesDownloaded = data ? Number(data.resumes_downloaded) || 0 : 0;
 
-      // Short cache to balance real-time accuracy and database efficiency
+      // Cache headers for performance and database efficiency
       res.setHeader('Cache-Control', 'public, s-maxage=5, stale-while-revalidate=15');
 
       return res.status(200).json({
@@ -92,7 +100,7 @@ export default async function handler(req, res) {
 
       const { event, eventId, visitorId } = body || {};
 
-      // 1. Strict event whitelist
+      // 1. Validate event type
       const ALLOWED_EVENTS = ['visitor', 'resume_created', 'resume_downloaded'];
       if (!event || !ALLOWED_EVENTS.includes(event)) {
         return res.status(400).json({
@@ -100,66 +108,56 @@ export default async function handler(req, res) {
         });
       }
 
-      // 2. Determine unique event identifier for idempotency
-      let finalEventId = eventId;
       const visitorHash = hashVisitorId(visitorId);
 
+      // 2. Handle Visitor Event
       if (event === 'visitor') {
         if (!visitorId) {
           return res.status(400).json({ error: 'visitorId is required for visitor events' });
         }
-        // Unique key for visitor is based on their hashed anonymous ID
-        finalEventId = `vis_${visitorHash}`;
-      } else if (!finalEventId) {
-        // For creations and downloads, eventId must be provided by the client
-        return res.status(400).json({ error: `eventId is required for ${event} events` });
-      }
 
-      // 3. Insert event into statistic_events table for idempotency
-      const { error: insertError } = await supabase
-        .from('statistic_events')
-        .insert({
-          event_id: finalEventId,
-          event_type: event,
-          visitor_id_hash: visitorHash
+        // Call RPC: record_unique_visitor(p_visitor_id_hash)
+        const { data, error: rpcError } = await supabase.rpc('record_unique_visitor', {
+          p_visitor_id_hash: visitorHash
         });
 
-      // If already recorded (duplicate key violation), return duplicate response without incrementing
-      if (insertError) {
-        if (insertError.code === '23505' || insertError.message?.includes('duplicate key')) {
-          return res.status(200).json({
-            success: true,
-            duplicate: true,
-            message: 'Event was already recorded.'
+        if (rpcError) {
+          console.error('Error in record_unique_visitor RPC:', rpcError);
+          return res.status(500).json({ error: 'Failed to record visitor' });
+        }
+
+        return res.status(200).json({
+          success: true,
+          newVisitor: Boolean(data)
+        });
+      }
+
+      // 3. Handle Resume Created and Resume Downloaded Events
+      if (event === 'resume_created' || event === 'resume_downloaded') {
+        // Validate eventId is a valid UUID
+        if (!eventId || !UUID_REGEX.test(eventId)) {
+          return res.status(400).json({
+            error: 'Invalid or missing UUID eventId. A valid RFC 4122 UUID is required.'
           });
         }
 
-        console.error('Error recording statistic event:', insertError);
-        return res.status(500).json({ error: 'Failed to record event' });
-      }
+        // Call RPC: record_statistic_event(p_event_id, p_event_type, p_visitor_id_hash)
+        const { data, error: rpcError } = await supabase.rpc('record_statistic_event', {
+          p_event_id: eventId,
+          p_event_type: event,
+          p_visitor_id_hash: visitorHash || null
+        });
 
-      // 4. Perform atomic counter increment using Supabase RPC function
-      const { data: updatedStats, error: rpcError } = await supabase.rpc('increment_site_stat', {
-        stat_name: event
-      });
-
-      if (rpcError) {
-        console.error('Error incrementing site statistics via RPC:', rpcError);
-        return res.status(500).json({ error: 'Failed to increment statistic counter' });
-      }
-
-      const updatedRow = Array.isArray(updatedStats) ? updatedStats[0] : updatedStats;
-
-      return res.status(200).json({
-        success: true,
-        event,
-        eventId: finalEventId,
-        stats: {
-          visitors: updatedRow ? Number(updatedRow.visitors) : undefined,
-          resumesCreated: updatedRow ? Number(updatedRow.resumes_created) : undefined,
-          resumesDownloaded: updatedRow ? Number(updatedRow.resumes_downloaded) : undefined
+        if (rpcError) {
+          console.error(`Error in record_statistic_event RPC for ${event}:`, rpcError);
+          return res.status(500).json({ error: `Failed to record ${event} event` });
         }
-      });
+
+        return res.status(200).json({
+          success: true,
+          newEvent: Boolean(data)
+        });
+      }
     }
 
     return res.status(405).json({ error: `Method ${req.method} not allowed` });
