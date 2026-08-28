@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FileText, Menu, X, ArrowRight, LayoutTemplate } from 'lucide-react';
+import { FileText, Menu, X, ArrowRight, LayoutTemplate, BookOpen } from 'lucide-react';
 import { Button } from '../common/Button';
 
 export const Navbar = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === '/' && location.pathname === '/') return true;
+    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    return false;
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
@@ -23,7 +27,7 @@ export const Navbar = () => {
                 Resume<span className="text-brand-600">Forge</span>
               </span>
               <span className="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 rounded-full border border-brand-200/60">
-                MVP
+                Free
               </span>
             </div>
           </Link>
@@ -33,7 +37,7 @@ export const Navbar = () => {
             <Link
               to="/"
               className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                isActive('/')
+                location.pathname === '/'
                   ? 'text-brand-600 bg-brand-50/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
@@ -51,6 +55,18 @@ export const Navbar = () => {
             >
               <LayoutTemplate className="w-4 h-4" />
               <span>Templates</span>
+            </Link>
+
+            <Link
+              to="/guides"
+              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+                isActive('/guides')
+                  ? 'text-brand-600 bg-brand-50/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Career Guides</span>
             </Link>
 
             <Link
@@ -101,7 +117,7 @@ export const Navbar = () => {
             to="/"
             onClick={() => setMobileMenuOpen(false)}
             className={`block px-3 py-2.5 rounded-lg text-base font-medium ${
-              isActive('/') ? 'text-brand-600 bg-brand-50' : 'text-slate-700 hover:bg-slate-50'
+              location.pathname === '/' ? 'text-brand-600 bg-brand-50' : 'text-slate-700 hover:bg-slate-50'
             }`}
           >
             Home
@@ -114,6 +130,15 @@ export const Navbar = () => {
             }`}
           >
             Templates
+          </Link>
+          <Link
+            to="/guides"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`block px-3 py-2.5 rounded-lg text-base font-medium ${
+              isActive('/guides') ? 'text-brand-600 bg-brand-50' : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            Career Guides
           </Link>
           <Link
             to="/builder"
@@ -136,4 +161,3 @@ export const Navbar = () => {
     </header>
   );
 };
-

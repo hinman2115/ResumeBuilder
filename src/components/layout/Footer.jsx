@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import { FileText, Shield, CheckCircle2 } from 'lucide-react';
+import { FileText, Shield, CheckCircle2, Heart } from 'lucide-react';
 
 export const Footer = () => {
   return (
     <footer className="bg-slate-900 text-slate-400 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand Column */}
-          <div className="md:col-span-2 space-y-4">
+          <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
                 <FileText className="w-4 h-4" />
@@ -16,26 +16,102 @@ export const Footer = () => {
                 Resume<span className="text-brand-400">Forge</span>
               </span>
             </div>
-            <p className="text-sm text-slate-400 max-w-md leading-relaxed">
-              Create clean, ATS-friendly, professional resumes in minutes. Choose from modern templates, customize styling, preview live, and export to crisp A4 PDF for free.
+            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
+              A universal online resume and CV builder for students, freshers, experienced professionals, engineers, educators, and job seekers across all industries.
             </p>
-            <div className="flex items-center gap-4 text-xs text-slate-400 pt-2">
-              <span className="inline-flex items-center gap-1.5">
-                <Shield className="w-4 h-4 text-emerald-400" />
-                100% Privacy — All data stored locally in your browser
-              </span>
+            <div className="flex items-center gap-2 text-xs text-emerald-400 pt-1">
+              <Shield className="w-4 h-4 flex-shrink-0" />
+              <span>100% Privacy — All data is stored locally in your browser</span>
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Column 2: Resume Builders by Role */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Navigation
+              Resumes by Career
             </h4>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               <li>
-                <Link to="/" className="hover:text-white transition-colors">
-                  Home
+                <Link to="/resume-builder-for-students" className="hover:text-white transition-colors">
+                  Students & Interns
+                </Link>
+              </li>
+              <li>
+                <Link to="/resume-builder-for-freshers" className="hover:text-white transition-colors">
+                  Freshers & Graduates
+                </Link>
+              </li>
+              <li>
+                <Link to="/resume-builder-for-professionals" className="hover:text-white transition-colors">
+                  Experienced Professionals
+                </Link>
+              </li>
+              <li>
+                <Link to="/resume-builder-for-developers" className="hover:text-white transition-colors">
+                  Software Developers
+                </Link>
+              </li>
+              <li>
+                <Link to="/resume-builder-for-teachers" className="hover:text-white transition-colors">
+                  Teachers & Educators
+                </Link>
+              </li>
+              <li>
+                <Link to="/resume-builder-for-engineers" className="hover:text-white transition-colors">
+                  Engineers & Technical
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Career Guides */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+              Career Guides
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li>
+                <Link to="/guides/how-to-make-a-resume" className="hover:text-white transition-colors">
+                  How to Make a Resume
+                </Link>
+              </li>
+              <li>
+                <Link to="/guides/resume-with-no-experience" className="hover:text-white transition-colors">
+                  Resume With No Experience
+                </Link>
+              </li>
+              <li>
+                <Link to="/guides/resume-vs-cv" className="hover:text-white transition-colors">
+                  Resume vs CV Differences
+                </Link>
+              </li>
+              <li>
+                <Link to="/guides/how-to-write-resume-summary" className="hover:text-white transition-colors">
+                  Writing a Resume Summary
+                </Link>
+              </li>
+              <li>
+                <Link to="/guides/how-to-list-work-experience" className="hover:text-white transition-colors">
+                  Listing Work Experience
+                </Link>
+              </li>
+              <li>
+                <Link to="/guides" className="text-brand-400 hover:text-brand-300 font-semibold transition-colors">
+                  View All Guides →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Tools & Formats */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+              Free Tools
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li>
+                <Link to="/builder" className="hover:text-white transition-colors">
+                  Resume Builder
                 </Link>
               </li>
               <li>
@@ -44,47 +120,31 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/builder" className="hover:text-white transition-colors">
-                  Resume Builder
+                <Link to="/free-resume-builder" className="hover:text-white transition-colors">
+                  Free Resume Maker
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Features */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              MVP Features
-            </h4>
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-brand-400" />
-                <span>3 Free Templates</span>
+              <li>
+                <Link to="/cv-builder" className="hover:text-white transition-colors">
+                  Curriculum Vitae (CV) Maker
+                </Link>
               </li>
-              <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-brand-400" />
-                <span>Live A4 Preview</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-brand-400" />
-                <span>Client-side PDF Export</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-brand-400" />
-                <span>LocalStorage Auto-Save</span>
+              <li>
+                <Link to="/resume-builder" className="hover:text-white transition-colors">
+                  Online Resume Creator
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} ResumeForge. Modern Resume Builder MVP.</p>
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} ResumeForge. Universal Free Online Resume & CV Builder.</p>
           <p className="flex items-center gap-1">
-            Built with React, Vite, Tailwind CSS & JavaScript
+            Built for job seekers worldwide • 100% Free Client-Side Tool
           </p>
         </div>
       </div>
     </footer>
   );
 };
-

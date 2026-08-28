@@ -4,6 +4,7 @@ import { useResume } from '../../hooks/useResume';
 import { TemplateRenderer } from './TemplateRenderer';
 import { exportResumeToPDF } from '../../utils/pdf';
 import { Button } from '../common/Button';
+import { trackResumeDownloaded } from '../../services/statistics';
 
 export const ResumePreview = () => {
   const { resumeData, showToast } = useResume();
@@ -16,9 +17,12 @@ export const ResumePreview = () => {
   const handleResetZoom = () => setZoom(0.9);
 
   const handleDownloadPDF = async () => {
+    if (isExporting) return;
     setIsExporting(true);
+
     const sanitizedName = (resumeData.personal?.fullName || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_');
     const fileName = `${sanitizedName}_Resume.pdf`;
+    const downloadEventId = 'dl_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
 
     try {
       await exportResumeToPDF('resume-export-container', {
@@ -26,8 +30,10 @@ export const ResumePreview = () => {
         onStart: () => {
           showToast('Generating high-resolution PDF...', 'info');
         },
-        onComplete: () => {
+        onComplete: async () => {
           setIsExporting(false);
+          // Track genuine successful download event in Supabase
+          await trackResumeDownloaded(downloadEventId);
           showToast('PDF downloaded successfully!', 'success');
         },
         onError: () => {
@@ -134,4 +140,3 @@ export const ResumePreview = () => {
     </div>
   );
 };
-

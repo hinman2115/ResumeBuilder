@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { defaultResumeData } from '../data/defaultResume';
 import { emptyResumeData } from '../data/emptyResume';
 import {
@@ -7,6 +7,7 @@ import {
   clearResumeFromStorage,
   getLastSavedTimestamp
 } from '../utils/storage';
+import { trackResumeCreated } from '../services/statistics';
 
 const ResumeContext = createContext(undefined);
 
@@ -14,6 +15,7 @@ export const ResumeProvider = ({ children }) => {
   const [resumeData, setResumeData] = useState(() => loadResumeFromStorage());
   const [lastSaved, setLastSaved] = useState(() => getLastSavedTimestamp());
   const [toastMessage, setToastMessage] = useState(null);
+  const hasTrackedCreationRef = useRef(false);
 
   const showToast = useCallback((text, type = 'success') => {
     setToastMessage({ text, type });
@@ -27,6 +29,17 @@ export const ResumeProvider = ({ children }) => {
   useEffect(() => {
     saveResumeToStorage(resumeData);
     setLastSaved(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+
+    // Track a single resume creation event when user has entered content for this session
+    if (resumeData?.personal?.fullName?.trim() && !hasTrackedCreationRef.current) {
+      hasTrackedCreationRef.current = true;
+      let resumeId = sessionStorage.getItem('resumeforge_current_session_resume_id');
+      if (!resumeId) {
+        resumeId = 'res_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+        sessionStorage.setItem('resumeforge_current_session_resume_id', resumeId);
+      }
+      trackResumeCreated(resumeId);
+    }
   }, [resumeData]);
 
   // Personal Info
@@ -208,12 +221,16 @@ export const ResumeProvider = ({ children }) => {
   const loadSampleData = useCallback(() => {
     setResumeData(defaultResumeData);
     saveResumeToStorage(defaultResumeData);
+    const resumeId = 'sample_' + Date.now().toString(36);
+    trackResumeCreated(resumeId);
     showToast('Loaded sample resume data', 'success');
   }, [showToast]);
 
   const resetResume = useCallback(() => {
     setResumeData(emptyResumeData);
     clearResumeFromStorage();
+    hasTrackedCreationRef.current = false;
+    sessionStorage.removeItem('resumeforge_current_session_resume_id');
     showToast('Cleared resume data', 'info');
   }, [showToast]);
 
@@ -221,6 +238,15 @@ export const ResumeProvider = ({ children }) => {
     saveResumeToStorage(resumeData);
     const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     setLastSaved(timeStr);
+    
+    // Explicit save event
+    let resumeId = sessionStorage.getItem('resumeforge_current_session_resume_id');
+    if (!resumeId) {
+      resumeId = 'res_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+      sessionStorage.setItem('resumeforge_current_session_resume_id', resumeId);
+    }
+    trackResumeCreated(resumeId);
+    
     showToast(`Resume saved successfully at ${timeStr}`, 'success');
   }, [resumeData, showToast]);
 
@@ -268,4 +294,3 @@ export const useResume = () => {
   }
   return context;
 };
-
