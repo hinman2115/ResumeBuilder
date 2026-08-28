@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
-// Standard UUID format validator (v1, v4, etc.)
+// Standard RFC 4122 UUID format validator
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-// Helper to normalize and resolve Supabase credentials from any common naming convention
+// Helper to normalize and resolve Supabase credentials from server environment
 function getCredentials() {
   let url = (
     process.env.SUPABASE_URL ||
@@ -14,12 +14,12 @@ function getCredentials() {
     ''
   ).trim();
 
-  // Strip wrapping quotes if entered in Vercel UI
+  // Strip accidental wrapping quotes from Vercel UI
   if ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
     url = url.slice(1, -1).trim();
   }
 
-  // Auto-prepend https:// if user pasted just "xxxx.supabase.co"
+  // Auto-prepend https:// if missing
   if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
     url = `https://${url}`;
   }
@@ -32,24 +32,15 @@ function getCredentials() {
     ''
   ).trim();
 
-  // Strip wrapping quotes if entered in Vercel UI
+  // Strip accidental wrapping quotes from Vercel UI
   if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
     key = key.slice(1, -1).trim();
   }
 
-  let hostname = null;
-  if (url) {
-    try {
-      hostname = new URL(url).hostname;
-    } catch {
-      hostname = 'invalid-url-format';
-    }
-  }
-
-  return { url, key, hostname };
+  return { url, key };
 }
 
-// Initialize Supabase admin client (server-side only with service_role)
+// Initialize Supabase admin client (server-side only)
 function getSupabaseClient() {
   const { url, key } = getCredentials();
 
@@ -79,7 +70,7 @@ function hashVisitorId(rawId) {
 }
 
 export default async function handler(req, res) {
-  // CORS Configuration: allow same origin or standard requests
+  // CORS Configuration
   const origin = req.headers.origin || '';
   if (origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -91,49 +82,17 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const { url, key, hostname } = getCredentials();
   const supabase = getSupabaseClient();
-
-  // Parse query params safely
-  let isDiag = false;
-  try {
-    const parsedUrl = new URL(req.url, 'http://localhost');
-    isDiag = req.query?.diag === '1' || parsedUrl.searchParams.get('diag') === '1';
-  } catch {
-    isDiag = req.query?.diag === '1';
-  }
-
-  // Diagnostic mode handler
-  if (isDiag) {
-    const allEnvKeys = Object.keys(process.env).filter(
-      k => !k.includes('KEY') && !k.includes('SECRET') && !k.includes('TOKEN') && !k.includes('PASSWORD') && !k.includes('AUTH')
-    );
-    return res.status(200).json({
-      supabaseUrlExists: Boolean(url),
-      serviceRoleKeyExists: Boolean(key),
-      supabaseHostname: hostname,
-      vercelEnv: process.env.VERCEL_ENV || 'unknown',
-      nodeEnv: process.env.NODE_ENV || 'unknown',
-      hasClient: Boolean(supabase),
-      envKeysCount: Object.keys(process.env).length,
-      sampleEnvKeys: allEnvKeys.slice(0, 15)
-    });
-  }
 
   if (!supabase) {
     return res.status(503).json({
-      error: 'Supabase environment variables (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY) are not configured.',
-      diagnostic: {
-        supabaseUrlExists: Boolean(url),
-        serviceRoleKeyExists: Boolean(key),
-        supabaseHostname: hostname
-      }
+      error: 'Supabase environment variables (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY) are not configured.'
     });
   }
 
   try {
     // --------------------------------------------------------------------------
-    // GET /api/statistics - Retrieve real global statistics
+    // GET /api/statistics - Retrieve real global statistics from Supabase
     // --------------------------------------------------------------------------
     if (req.method === 'GET') {
       const { data, error } = await supabase
@@ -142,16 +101,30 @@ export default async function handler(req, res) {
         .eq('id', 1)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Supabase query error:', error);
-        return res.status(500).json({ error: 'Failed to retrieve site statistics' });
+      let visitors = data ? Number(data.visitors) || 0 : 0;
+      let resumesCreated = data ? Number(data.resumes_created) || 0 : 0;
+      let resumesDownloaded = data ? Number(data.resumes_downloaded) || 0 : 0;
+
+      // In case site_statistics baseline row is missing or awaiting aggregation, read table counts
+      if (!data || (visitors === 0 && resumesCreated === 0 && resumesDownloaded === 0)) {
+        const [visCount, createdCount, dlCount] = await Promise.all([
+          supabase.from('unique_visitors').select('*', { count: 'exact', head: true }),
+          supabase.from('statistic_events').select('*', { count: 'exact', head: true }).eq('event_type', 'resume_created'),
+          supabase.from('statistic_events').select('*', { count: 'exact', head: true }).eq('event_type', 'resume_downloaded')
+        ]);
+
+        if (typeof visCount.count === 'number') {
+          visitors = Math.max(visitors, visCount.count);
+        }
+        if (typeof createdCount.count === 'number') {
+          resumesCreated = Math.max(resumesCreated, createdCount.count);
+        }
+        if (typeof dlCount.count === 'number') {
+          resumesDownloaded = Math.max(resumesDownloaded, dlCount.count);
+        }
       }
 
-      const visitors = data ? Number(data.visitors) || 0 : 0;
-      const resumesCreated = data ? Number(data.resumes_created) || 0 : 0;
-      const resumesDownloaded = data ? Number(data.resumes_downloaded) || 0 : 0;
-
-      // Cache headers for performance and database efficiency
+      // Cache header: short cache for real-time accuracy and performance
       res.setHeader('Cache-Control', 'public, s-maxage=5, stale-while-revalidate=15');
 
       return res.status(200).json({
@@ -176,7 +149,7 @@ export default async function handler(req, res) {
 
       const { event, eventId, visitorId } = body || {};
 
-      // 1. Validate event type
+      // 1. Strict event whitelist
       const ALLOWED_EVENTS = ['visitor', 'resume_created', 'resume_downloaded'];
       if (!event || !ALLOWED_EVENTS.includes(event)) {
         return res.status(400).json({
@@ -208,7 +181,7 @@ export default async function handler(req, res) {
         });
       }
 
-      // 3. Handle Resume Created and Resume Downloaded Events
+      // 3. Handle Resume Created & Downloaded Events
       if (event === 'resume_created' || event === 'resume_downloaded') {
         // Validate eventId is a valid UUID
         if (!eventId || !UUID_REGEX.test(eventId)) {
