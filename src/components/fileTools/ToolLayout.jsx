@@ -129,9 +129,9 @@ export const ToolLayout = ({
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-bold text-slate-900 mb-1.5">100% Free Forever</h3>
+              <h3 className="text-base font-bold text-slate-900 mb-1.5">Free & Open Access</h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                No account registration, no credit card, and no hidden subscriptions. Download unlimited files completely free of charge.
+                No account registration, no credit card, and no hidden subscriptions. Free client-side document processing with zero paywalls.
               </p>
             </div>
           </div>

@@ -53,6 +53,13 @@ export const PdfToJpg = () => {
   };
 
   const handleReset = () => {
+    if (result?.previewUrl) {
+      try {
+        URL.revokeObjectURL(result.previewUrl);
+      } catch {
+        // ignore
+      }
+    }
     setFiles([]);
     setResult(null);
     setError(null);
