@@ -79,6 +79,17 @@ export const Navbar = () => {
             >
               Resume Builder
             </Link>
+
+            <Link
+              to="/file-tools"
+              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
+                isActive('/file-tools')
+                  ? 'text-brand-600 bg-brand-50/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <span>File Tools</span>
+            </Link>
           </nav>
 
           {/* Action CTA */}
@@ -148,6 +159,15 @@ export const Navbar = () => {
             }`}
           >
             Resume Builder
+          </Link>
+          <Link
+            to="/file-tools"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`block px-3 py-2.5 rounded-lg text-base font-medium ${
+              isActive('/file-tools') ? 'text-brand-600 bg-brand-50' : 'text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            File Tools
           </Link>
           <div className="pt-2">
             <Link to="/builder" onClick={() => setMobileMenuOpen(false)}>

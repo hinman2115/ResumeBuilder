@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer className="bg-slate-900 text-slate-400 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
@@ -17,11 +17,11 @@ export const Footer = () => {
               </span>
             </div>
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
-              A universal online resume and CV builder for students, freshers, experienced professionals, engineers, educators, and job seekers across all industries.
+              A universal online resume and CV builder, plus free in-browser PDF & file tools for job seekers, professionals, and students.
             </p>
             <div className="flex items-center gap-2 text-xs text-emerald-400 pt-1">
               <Shield className="w-4 h-4 flex-shrink-0" />
-              <span>100% Privacy — All data is stored locally in your browser</span>
+              <span>100% Privacy — All data and files processed locally in your browser</span>
             </div>
           </div>
 
@@ -43,7 +43,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link to="/resume-builder-for-professionals" className="hover:text-white transition-colors">
-                  Experienced Professionals
+                  Experienced Pros
                 </Link>
               </li>
               <li>
@@ -87,12 +87,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link to="/guides/how-to-write-resume-summary" className="hover:text-white transition-colors">
-                  Writing a Resume Summary
-                </Link>
-              </li>
-              <li>
-                <Link to="/guides/how-to-list-work-experience" className="hover:text-white transition-colors">
-                  Listing Work Experience
+                  Writing a Summary
                 </Link>
               </li>
               <li>
@@ -103,10 +98,59 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Tools & Formats */}
+          {/* Column 4: Free PDF & File Tools */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Free Tools
+              PDF & File Tools
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li>
+                <Link to="/file-tools/merge-pdf" className="hover:text-white transition-colors">
+                  Merge PDF
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/split-pdf" className="hover:text-white transition-colors">
+                  Split PDF
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/compress-pdf" className="hover:text-white transition-colors">
+                  Compress PDF
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/jpg-to-pdf" className="hover:text-white transition-colors">
+                  JPG to PDF
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/pdf-to-jpg" className="hover:text-white transition-colors">
+                  PDF to JPG
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/create-zip" className="hover:text-white transition-colors">
+                  Create ZIP
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools/extract-zip" className="hover:text-white transition-colors">
+                  Extract ZIP
+                </Link>
+              </li>
+              <li>
+                <Link to="/file-tools" className="text-brand-400 hover:text-brand-300 font-semibold transition-colors">
+                  All File Tools →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5: Resume Tools */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+              Resume Tools
             </h4>
             <ul className="space-y-2 text-xs sm:text-sm">
               <li>
@@ -126,7 +170,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link to="/cv-builder" className="hover:text-white transition-colors">
-                  Curriculum Vitae (CV) Maker
+                  CV Maker
                 </Link>
               </li>
               <li>

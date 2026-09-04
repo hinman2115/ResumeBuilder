@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { ResumeProvider } from './context/ResumeContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
@@ -31,6 +32,24 @@ import { ResumeVsCv } from './pages/guides/ResumeVsCv';
 import { HowToWriteResumeSummary } from './pages/guides/HowToWriteResumeSummary';
 import { HowToListWorkExperience } from './pages/guides/HowToListWorkExperience';
 
+// Lazy-Loaded File Tools (Heavy libraries loaded only on-demand)
+const FileToolsIndex = lazy(() => import('./pages/fileTools/FileToolsIndex').then(m => ({ default: m.FileToolsIndex })));
+const MergePdf = lazy(() => import('./pages/fileTools/MergePdf').then(m => ({ default: m.MergePdf })));
+const SplitPdf = lazy(() => import('./pages/fileTools/SplitPdf').then(m => ({ default: m.SplitPdf })));
+const CompressPdf = lazy(() => import('./pages/fileTools/CompressPdf').then(m => ({ default: m.CompressPdf })));
+const JpgToPdf = lazy(() => import('./pages/fileTools/JpgToPdf').then(m => ({ default: m.JpgToPdf })));
+const PdfToJpg = lazy(() => import('./pages/fileTools/PdfToJpg').then(m => ({ default: m.PdfToJpg })));
+const CreateZip = lazy(() => import('./pages/fileTools/CreateZip').then(m => ({ default: m.CreateZip })));
+const ExtractZip = lazy(() => import('./pages/fileTools/ExtractZip').then(m => ({ default: m.ExtractZip })));
+const GenericComingSoon = lazy(() => import('./pages/fileTools/GenericComingSoon').then(m => ({ default: m.GenericComingSoon })));
+
+const FileToolsLoadingFallback = () => (
+  <div className="min-h-[60vh] flex flex-col items-center justify-center text-slate-500 py-16">
+    <Loader2 className="w-8 h-8 animate-spin text-brand-600 mb-3" />
+    <p className="text-sm font-semibold">Loading tool...</p>
+  </div>
+);
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -59,6 +78,81 @@ export const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/templates" element={<Templates />} />
               <Route path="/builder" element={<Builder />} />
+
+              {/* File Tools Hub & Dedicated Tool Routes */}
+              <Route
+                path="/file-tools"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <FileToolsIndex />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/merge-pdf"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <MergePdf />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/split-pdf"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <SplitPdf />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/compress-pdf"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <CompressPdf />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/jpg-to-pdf"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <JpgToPdf />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/pdf-to-jpg"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <PdfToJpg />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/create-zip"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <CreateZip />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/file-tools/extract-zip"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <ExtractZip />
+                  </Suspense>
+                }
+              />
+              {/* Catch-all for Coming Soon Tools */}
+              <Route
+                path="/file-tools/:toolSlug"
+                element={
+                  <Suspense fallback={<FileToolsLoadingFallback />}>
+                    <GenericComingSoon />
+                  </Suspense>
+                }
+              />
 
               {/* SEO Audience & Intent Landing Pages */}
               <Route path="/resume-builder" element={<GeneralResumeBuilder />} />
