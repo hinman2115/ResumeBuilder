@@ -13,7 +13,7 @@ export const DownloadResult = ({
   previewUrl = null
 }) => {
   return (
-    <div className="w-full bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 text-center shadow-sm flex flex-col items-center justify-center animate-in fade-in duration-200">
+    <div className="w-full bg-[#F7F7FA] rounded-[16px] border border-[#E1E2E7] p-8 sm:p-12 text-center shadow-[var(--ui-shadow)] flex flex-col items-center justify-center animate-in fade-in duration-200">
       <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 shadow-sm border border-emerald-100">
         <CheckCircle2 className="w-8 h-8" />
       </div>

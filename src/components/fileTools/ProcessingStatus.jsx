@@ -6,7 +6,7 @@ export const ProcessingStatus = ({
   subtitle = 'Please wait while your document is being prepared directly in your browser.'
 }) => {
   return (
-    <div className="w-full bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 text-center shadow-sm flex flex-col items-center justify-center animate-in fade-in duration-200">
+    <div className="w-full bg-[#F7F7FA] rounded-[16px] border border-[#E1E2E7] p-8 sm:p-12 text-center shadow-[var(--ui-shadow)] flex flex-col items-center justify-center animate-in fade-in duration-200">
       <div className="w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-5">
         <Loader2 className="w-7 h-7 animate-spin" />
       </div>
@@ -26,7 +26,7 @@ export const ProcessingStatus = ({
         </div>
         <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-brand-600 to-sky-500 rounded-full transition-all duration-200 ease-out"
+            className="h-full bg-slate-800 rounded-full transition-all duration-200 ease-out"
             style={{ width: `${Math.max(5, Math.min(progress, 100))}%` }}
           />
         </div>

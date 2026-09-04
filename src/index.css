@@ -2,10 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ui-page: #f7f7fa;
+  --ui-card: #ffffff;
+  --ui-text: #2f3038;
+  --ui-muted: #6f707a;
+  --ui-border: #e1e2e7;
+  --ui-primary: #30313a;
+  --ui-blue-soft: #eef5ff;
+  --ui-green-soft: #edf8f2;
+  --ui-orange-soft: #fff5e9;
+  --ui-purple-soft: #f5f0ff;
+  --ui-radius: 16px;
+  --ui-shadow: 0 2px 8px rgba(47, 48, 56, 0.04);
+  --ui-shadow-hover: 0 8px 24px rgba(47, 48, 56, 0.08);
+  --ui-transition: 180ms ease;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--ui-page);
+  }
+
+  body {
+    background: var(--ui-page);
+    color: var(--ui-text);
   }
 }
 

@@ -14,16 +14,16 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <header className="sticky top-0 z-40 bg-white border-b border-[#E1E2E7] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-10 h-10 rounded-xl bg-[#30313A] flex items-center justify-center text-white shadow-sm group-hover:bg-slate-700 transition-colors duration-200">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xl font-black tracking-tight text-slate-900">
+                <span className="text-xl font-bold tracking-tight text-[#2F3038]">
                 Resume<span className="text-brand-600">Forge</span>
               </span>
               <span className="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 rounded-full border border-brand-200/60">

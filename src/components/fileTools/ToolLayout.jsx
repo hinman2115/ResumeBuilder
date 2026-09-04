@@ -48,7 +48,7 @@ export const ToolLayout = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-[#F7F7FA]">
       <SEO
         title={tool.metaTitle || `${tool.title} Online Free | ResumeForge`}
         description={tool.metaDescription || tool.description}
@@ -57,7 +57,7 @@ export const ToolLayout = ({
       />
 
       {/* Hero / Header Section */}
-      <section className="bg-gradient-to-b from-brand-50/70 via-white to-slate-50 pt-8 pb-12 sm:pb-16 border-b border-slate-200/80">
+      <section className="bg-[#F7F7FA] pt-8 pb-10 border-b border-[#E1E2E7]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Breadcrumbs items={breadcrumbItems} />
@@ -69,11 +69,11 @@ export const ToolLayout = ({
               <span>{tool.categoryLabel}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#2F3038] tracking-tight">
               {tool.title}
             </h1>
 
-            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+            <p className="mt-4 text-base sm:text-lg text-[#6F707A] leading-relaxed font-normal">
               {tool.description}
             </p>
 
@@ -93,9 +93,9 @@ export const ToolLayout = ({
       </section>
 
       {/* Main Interactive Tool Area */}
-      <section className="py-8 sm:py-12 -mt-6">
+      <section className="py-8 sm:py-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-4 sm:p-8">
+          <div className="bg-white rounded-[16px] border border-[#E1E2E7] shadow-[var(--ui-shadow)] p-4 sm:p-8">
             {children}
           </div>
         </div>
@@ -105,7 +105,7 @@ export const ToolLayout = ({
       <section className="py-12 sm:py-16 bg-white border-t border-slate-200/80">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80">
+            <div className="p-6 rounded-[16px] bg-[#F7F7FA] border border-[#E1E2E7] shadow-[var(--ui-shadow)]">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
                 <Lock className="w-5 h-5" />
               </div>
@@ -115,7 +115,7 @@ export const ToolLayout = ({
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80">
+            <div className="p-6 rounded-[16px] bg-[#F7F7FA] border border-[#E1E2E7] shadow-[var(--ui-shadow)]">
               <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center mb-4">
                 <Zap className="w-5 h-5" />
               </div>
@@ -125,7 +125,7 @@ export const ToolLayout = ({
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80">
+            <div className="p-6 rounded-[16px] bg-[#F7F7FA] border border-[#E1E2E7] shadow-[var(--ui-shadow)]">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-5 h-5" />
               </div>
@@ -138,7 +138,7 @@ export const ToolLayout = ({
 
           {/* Tool specific features if configured */}
           {tool.features && tool.features.length > 0 && (
-            <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200">
+            <div className="mt-12 p-6 sm:p-8 rounded-[16px] bg-[#F7F7FA] border border-[#E1E2E7]">
               <h3 className="text-lg font-bold text-slate-900 mb-4">
                 Key Features of {tool.title}
               </h3>
@@ -157,7 +157,7 @@ export const ToolLayout = ({
 
       {/* FAQ Section */}
       {tool.faq && tool.faq.length > 0 && (
-        <section className="py-12 sm:py-16 bg-slate-50 border-t border-slate-200/80">
+        <section className="py-12 sm:py-16 bg-[#F7F7FA] border-t border-[#E1E2E7]">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-slate-900 text-center tracking-tight mb-8">
               Frequently Asked Questions
@@ -197,7 +197,7 @@ export const ToolLayout = ({
       )}
 
       {/* Related Tools Section */}
-      <section className="py-12 sm:py-16 bg-white border-t border-slate-200/80">
+      <section className="py-12 sm:py-16 bg-white border-t border-[#E1E2E7]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>

@@ -92,10 +92,10 @@ export const FileUploader = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onClick={() => fileInputRef.current?.click()}
-        className={`relative border-2 border-dashed rounded-2xl p-8 sm:p-12 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center ${
+          className={`relative border-2 border-dashed rounded-[16px] p-8 sm:p-12 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center ${
           isDragOver
             ? 'border-brand-500 bg-brand-50/70 scale-[0.99] shadow-inner'
-            : 'border-slate-300 hover:border-brand-400 bg-white hover:bg-slate-50/50 shadow-sm'
+            : 'border-[#E1E2E7] hover:border-slate-400 bg-[#F7F7FA] hover:bg-white shadow-[var(--ui-shadow)]'
         }`}
       >
         <input

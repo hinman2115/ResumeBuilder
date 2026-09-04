@@ -9,7 +9,7 @@ export const ComingSoonTool = ({ tool }) => {
 
   return (
     <ToolLayout tool={tool}>
-      <div className="py-8 text-center flex flex-col items-center justify-center">
+      <div className="py-6 text-center flex flex-col items-center justify-center">
         <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mb-5">
           <Clock className="w-8 h-8" />
         </div>

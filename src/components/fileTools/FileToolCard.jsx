@@ -44,9 +44,9 @@ export const FileToolCard = ({ tool }) => {
   return (
     <Link
       to={tool.route}
-      className={`group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-slate-200/80 transition-all duration-200 ${
+      className={`group relative flex flex-col justify-between p-5 rounded-[16px] bg-white border border-[#E1E2E7] shadow-[var(--ui-shadow)] transition-all duration-200 ${
         isAvailable
-          ? 'hover:border-brand-300 hover:shadow-lg hover:-translate-y-0.5'
+          ? 'hover:border-slate-300 hover:shadow-[var(--ui-shadow-hover)]'
           : 'hover:border-slate-300 hover:shadow-sm opacity-90'
       }`}
     >
@@ -67,7 +67,7 @@ export const FileToolCard = ({ tool }) => {
           )}
         </div>
 
-        <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+        <h3 className="text-base font-semibold text-[#2F3038] group-hover:text-slate-700 transition-colors">
           {tool.title}
         </h3>
         <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">

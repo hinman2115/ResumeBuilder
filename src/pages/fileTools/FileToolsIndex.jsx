@@ -69,7 +69,7 @@ export const FileToolsIndex = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#F7F7FA] flex flex-col">
       <SEO
         title="Free PDF & File Tools Online | ResumeForge"
         description="Free online tools to merge, split, compress, convert, and manage PDF and common files directly in your web browser. 100% private and secure."
@@ -78,7 +78,7 @@ export const FileToolsIndex = () => {
       />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/70 via-white to-slate-50 pt-10 pb-16 border-b border-slate-200/80">
+      <section className="relative overflow-hidden bg-[#F7F7FA] pt-8 pb-10 border-b border-[#E1E2E7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <Breadcrumbs items={breadcrumbs} />
@@ -90,11 +90,11 @@ export const FileToolsIndex = () => {
               <span>Free In-Browser Utility Platform</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-[#2F3038] tracking-tight">
               Free PDF & <span className="text-brand-600">File Tools</span>
             </h1>
 
-            <p className="mt-4 text-base sm:text-xl text-slate-600 leading-relaxed font-normal">
+            <p className="mt-4 text-base sm:text-lg text-[#6F707A] leading-relaxed font-normal">
               Convert, compress, merge, split, and manage your files online.
             </p>
 
@@ -121,7 +121,7 @@ export const FileToolsIndex = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search tools (e.g. merge, compress, zip, jpg)..."
-                className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 shadow-sm text-sm"
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-white border border-[#E1E2E7] focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-400 shadow-sm text-sm"
               />
               {searchQuery && (
                 <button
@@ -141,9 +141,9 @@ export const FileToolsIndex = () => {
       <section className="py-12 sm:py-16 flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Filter Bar */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-slate-200/80 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E1E2E7] mb-7">
             {/* Category Tabs */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="Tool categories">
               {TOOL_CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
@@ -151,8 +151,8 @@ export const FileToolsIndex = () => {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                     selectedCategory === cat.id
-                      ? 'bg-slate-900 text-white shadow-sm'
-                      : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80'
+                      ? 'bg-[#30313A] text-white shadow-sm'
+                      : 'bg-white text-[#6F707A] hover:bg-slate-50 border border-[#E1E2E7]'
                   }`}
                 >
                   {cat.label}
@@ -161,7 +161,7 @@ export const FileToolsIndex = () => {
             </div>
 
             {/* Status Filter */}
-            <div className="flex items-center gap-1.5 p-1 bg-white rounded-xl border border-slate-200/80 self-start md:self-auto text-xs font-semibold text-slate-600">
+            <div className="flex items-center gap-1.5 p-1 bg-white rounded-xl border border-[#E1E2E7] self-start md:self-auto text-xs font-semibold text-[#6F707A]">
               <button
                 type="button"
                 onClick={() => setStatusFilter('all')}
@@ -210,7 +210,7 @@ export const FileToolsIndex = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {filteredTools.map(tool => (
                 <FileToolCard key={tool.id} tool={tool} />
               ))}
