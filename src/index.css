@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 :root {
+  --color-background: #f7f7fa;
+  --color-card: #ffffff;
+  --color-text: #2f3038;
+  --color-muted: #6f707a;
+  --color-border: #e1e2e7;
+  --color-primary: #026fc7;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
   --ui-page: #f7f7fa;
   --ui-card: #ffffff;
   --ui-text: #2f3038;
@@ -13,9 +23,12 @@
   --ui-green-soft: #edf8f2;
   --ui-orange-soft: #fff5e9;
   --ui-purple-soft: #f5f0ff;
+  --ui-red-soft: #fff0f0;
   --ui-radius: 16px;
   --ui-shadow: 0 2px 8px rgba(47, 48, 56, 0.04);
   --ui-shadow-hover: 0 8px 24px rgba(47, 48, 56, 0.08);
+  --ui-shadow: 0 1px 3px rgba(47, 48, 56, 0.04), 0 2px 8px rgba(47, 48, 56, 0.02);
+  --ui-shadow-hover: 0 6px 18px rgba(47, 48, 56, 0.07);
   --ui-transition: 180ms ease;
 }
 

@@ -80,6 +80,7 @@ export const ToolLayout = ({
             <div className="mt-5 flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm font-medium text-slate-500">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" /> 100% Free & Private
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Free & Private
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" /> Processed In-Browser

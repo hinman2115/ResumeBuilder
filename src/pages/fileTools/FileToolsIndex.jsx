@@ -73,6 +73,7 @@ export const FileToolsIndex = () => {
       <SEO
         title="Free PDF & File Tools Online | ResumeForge"
         description="Free online tools to merge, split, compress, convert, and manage PDF and common files directly in your web browser. 100% private and secure."
+        description="Free online tools to merge, split, compress, convert, and manage PDF and common files directly in your web browser. Private and secure in-browser processing."
         canonicalUrl="https://resumeforge.app/file-tools"
         schemaData={schemaData}
       />
@@ -102,6 +103,7 @@ export const FileToolsIndex = () => {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-5 text-xs sm:text-sm font-medium text-slate-600">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" /> 100% Client-Side Privacy
+                <ShieldCheck className="w-4 h-4 text-emerald-500" /> Client-Side Privacy
               </span>
               <span className="flex items-center gap-1.5">
                 <Lock className="w-4 h-4 text-emerald-500" /> Zero Files Uploaded
@@ -189,6 +191,11 @@ export const FileToolsIndex = () => {
               >
                 Coming Soon ({comingSoonCount})
               </button>
+            {/* Search Result Counter */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#6F707A]">
+              <span className="px-3 py-1.5 bg-white rounded-xl border border-[#E1E2E7]">
+                Showing {filteredTools.length} of {FILE_TOOLS.length} Tools
+              </span>
             </div>
           </div>
 
@@ -237,6 +244,7 @@ export const FileToolsIndex = () => {
                 <Lock className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900 mb-2">100% In-Browser Privacy</h3>
+              <h3 className="text-base font-bold text-slate-900 mb-2">In-Browser Privacy</h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Your private resumes, sensitive portfolios, and documents never leave your computer. Processing runs entirely in your browser using modern WebAssembly.
               </p>

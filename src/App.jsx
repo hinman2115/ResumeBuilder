@@ -41,6 +41,30 @@ const JpgToPdf = lazy(() => import('./pages/fileTools/JpgToPdf').then(m => ({ de
 const PdfToJpg = lazy(() => import('./pages/fileTools/PdfToJpg').then(m => ({ default: m.PdfToJpg })));
 const CreateZip = lazy(() => import('./pages/fileTools/CreateZip').then(m => ({ default: m.CreateZip })));
 const ExtractZip = lazy(() => import('./pages/fileTools/ExtractZip').then(m => ({ default: m.ExtractZip })));
+const RotatePdf = lazy(() => import('./pages/fileTools/RotatePdf').then(m => ({ default: m.RotatePdf })));
+const ReorderPdf = lazy(() => import('./pages/fileTools/ReorderPdf').then(m => ({ default: m.ReorderPdf })));
+const ExtractPdfPages = lazy(() => import('./pages/fileTools/ExtractPdfPages').then(m => ({ default: m.ExtractPdfPages })));
+const DeletePdfPages = lazy(() => import('./pages/fileTools/DeletePdfPages').then(m => ({ default: m.DeletePdfPages })));
+const PdfMetadata = lazy(() => import('./pages/fileTools/PdfMetadata').then(m => ({ default: m.PdfMetadata })));
+const ProtectPdf = lazy(() => import('./pages/fileTools/ProtectPdf').then(m => ({ default: m.ProtectPdf })));
+const UnlockPdf = lazy(() => import('./pages/fileTools/UnlockPdf').then(m => ({ default: m.UnlockPdf })));
+const WatermarkPdf = lazy(() => import('./pages/fileTools/WatermarkPdf').then(m => ({ default: m.WatermarkPdf })));
+const AddPageNumbers = lazy(() => import('./pages/fileTools/AddPageNumbers').then(m => ({ default: m.AddPageNumbers })));
+const PdfToWord = lazy(() => import('./pages/fileTools/PdfToWord').then(m => ({ default: m.PdfToWord })));
+const WordToPdf = lazy(() => import('./pages/fileTools/WordToPdf').then(m => ({ default: m.WordToPdf })));
+const PdfToPng = lazy(() => import('./pages/fileTools/PdfToPng').then(m => ({ default: m.PdfToPng })));
+const PngToPdf = lazy(() => import('./pages/fileTools/PngToPdf').then(m => ({ default: m.PngToPdf })));
+const PdfToTxt = lazy(() => import('./pages/fileTools/PdfToTxt').then(m => ({ default: m.PdfToTxt })));
+const ConvertImage = lazy(() => import('./pages/fileTools/ConvertImage').then(m => ({ default: m.ConvertImage })));
+const CompressImage = lazy(() => import('./pages/fileTools/CompressImage').then(m => ({ default: m.CompressImage })));
+const ResizeImage = lazy(() => import('./pages/fileTools/ResizeImage').then(m => ({ default: m.ResizeImage })));
+const RotateImage = lazy(() => import('./pages/fileTools/RotateImage').then(m => ({ default: m.RotateImage })));
+const TextToPdf = lazy(() => import('./pages/fileTools/TextToPdf').then(m => ({ default: m.TextToPdf })));
+const HtmlToPdf = lazy(() => import('./pages/fileTools/HtmlToPdf').then(m => ({ default: m.HtmlToPdf })));
+const MarkdownToPdf = lazy(() => import('./pages/fileTools/MarkdownToPdf').then(m => ({ default: m.MarkdownToPdf })));
+const CombineFiles = lazy(() => import('./pages/fileTools/CombineFiles').then(m => ({ default: m.CombineFiles })));
+const RenameFiles = lazy(() => import('./pages/fileTools/RenameFiles').then(m => ({ default: m.RenameFiles })));
+const DownloadAsZip = lazy(() => import('./pages/fileTools/DownloadAsZip').then(m => ({ default: m.DownloadAsZip })));
 const GenericComingSoon = lazy(() => import('./pages/fileTools/GenericComingSoon').then(m => ({ default: m.GenericComingSoon })));
 
 const FileToolsLoadingFallback = () => (
@@ -145,6 +169,45 @@ export const App = () => {
                 }
               />
               {/* Catch-all for Coming Soon Tools */}
+              {/* Additional Dedicated PDF Tools */}
+              <Route path="/file-tools/rotate-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><RotatePdf /></Suspense>} />
+              <Route path="/file-tools/reorder-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><ReorderPdf /></Suspense>} />
+              <Route path="/file-tools/extract-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><ExtractPdfPages /></Suspense>} />
+              <Route path="/file-tools/delete-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><DeletePdfPages /></Suspense>} />
+              <Route path="/file-tools/pdf-metadata" element={<Suspense fallback={<FileToolsLoadingFallback />}><PdfMetadata /></Suspense>} />
+              <Route path="/file-tools/protect-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><ProtectPdf /></Suspense>} />
+              <Route path="/file-tools/unlock-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><UnlockPdf /></Suspense>} />
+              <Route path="/file-tools/watermark-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><WatermarkPdf /></Suspense>} />
+              <Route path="/file-tools/add-page-numbers" element={<Suspense fallback={<FileToolsLoadingFallback />}><AddPageNumbers /></Suspense>} />
+              <Route path="/file-tools/pdf-to-word" element={<Suspense fallback={<FileToolsLoadingFallback />}><PdfToWord /></Suspense>} />
+              <Route path="/file-tools/word-to-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><WordToPdf /></Suspense>} />
+              <Route path="/file-tools/pdf-to-png" element={<Suspense fallback={<FileToolsLoadingFallback />}><PdfToPng /></Suspense>} />
+              <Route path="/file-tools/png-to-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><PngToPdf /></Suspense>} />
+              <Route path="/file-tools/pdf-to-txt" element={<Suspense fallback={<FileToolsLoadingFallback />}><PdfToTxt /></Suspense>} />
+
+              {/* Image Tools */}
+              <Route path="/file-tools/convert-image" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage /></Suspense>} />
+              <Route path="/file-tools/webp-to-jpg" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="webp-to-jpg" defaultTarget="jpeg" /></Suspense>} />
+              <Route path="/file-tools/webp-to-png" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="webp-to-png" defaultTarget="png" /></Suspense>} />
+              <Route path="/file-tools/jpg-to-png" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="jpg-to-png" defaultTarget="png" /></Suspense>} />
+              <Route path="/file-tools/png-to-jpg" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="png-to-jpg" defaultTarget="jpeg" /></Suspense>} />
+              <Route path="/file-tools/jpg-to-webp" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="jpg-to-webp" defaultTarget="webp" /></Suspense>} />
+              <Route path="/file-tools/png-to-webp" element={<Suspense fallback={<FileToolsLoadingFallback />}><ConvertImage forcedSlug="png-to-webp" defaultTarget="webp" /></Suspense>} />
+              <Route path="/file-tools/compress-image" element={<Suspense fallback={<FileToolsLoadingFallback />}><CompressImage /></Suspense>} />
+              <Route path="/file-tools/resize-image" element={<Suspense fallback={<FileToolsLoadingFallback />}><ResizeImage /></Suspense>} />
+              <Route path="/file-tools/rotate-image" element={<Suspense fallback={<FileToolsLoadingFallback />}><RotateImage /></Suspense>} />
+
+              {/* Document Tools */}
+              <Route path="/file-tools/text-to-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><TextToPdf /></Suspense>} />
+              <Route path="/file-tools/html-to-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><HtmlToPdf /></Suspense>} />
+              <Route path="/file-tools/markdown-to-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><MarkdownToPdf /></Suspense>} />
+
+              {/* File Utilities */}
+              <Route path="/file-tools/combine-files" element={<Suspense fallback={<FileToolsLoadingFallback />}><CombineFiles /></Suspense>} />
+              <Route path="/file-tools/rename-files" element={<Suspense fallback={<FileToolsLoadingFallback />}><RenameFiles /></Suspense>} />
+              <Route path="/file-tools/download-as-zip" element={<Suspense fallback={<FileToolsLoadingFallback />}><DownloadAsZip /></Suspense>} />
+
+              {/* Catch-all for any future tools */}
               <Route
                 path="/file-tools/:toolSlug"
                 element={

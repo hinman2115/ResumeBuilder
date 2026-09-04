@@ -1,10 +1,13 @@
 /**
  * Central Catalog & Configuration for ResumeForge File Tools
+ * Complete Catalog & Configuration for ResumeForge File Tools (37 Tools)
+ * Visual Style: Soft Minimal SaaS with subtle pastel icon accents
  */
 
 export const TOOL_CATEGORIES = [
   { id: 'all', label: 'All Tools' },
   { id: 'pdf', label: 'PDF Tools' },
+  { id: 'image', label: 'Image Tools' },
   { id: 'document', label: 'Document Tools' },
   { id: 'utility', label: 'File Utilities' }
 ];
@@ -12,6 +15,7 @@ export const TOOL_CATEGORIES = [
 export const FILE_TOOLS = [
   // ==========================================
   // CATEGORY 1: PDF TOOLS
+  // CATEGORY 1: PDF TOOLS (18 Tools)
   // ==========================================
   {
     id: 'merge-pdf',
@@ -25,10 +29,13 @@ export const FILE_TOOLS = [
     icon: 'Layers',
     badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     iconBg: 'bg-emerald-100 text-emerald-700',
+    pastel: 'bg-rose-50 text-rose-600',
     metaTitle: 'Merge PDF Online Free – Combine PDF Files | ResumeForge',
     metaDescription: 'Merge and combine multiple PDF documents into a single file online. 100% free, private in-browser processing, and fast download.',
+    metaDescription: 'Merge multiple PDF files into one document online. Fast, private client-side processing directly in your browser.',
     accept: { 'application/pdf': ['.pdf'] },
     acceptSummary: 'PDF documents only (.pdf)',
+    acceptSummary: 'PDF documents (.pdf)',
     multiple: true,
     maxFiles: 30,
     maxFileSizeMB: 50,
@@ -48,6 +55,8 @@ export const FILE_TOOLS = [
         answer: 'Yes! Use the Up and Down arrow buttons or drag to place your PDF files in the exact sequence you desire.'
       }
     ]
+    maxFiles: 50,
+    maxFileSizeMB: 80
   },
   {
     id: 'split-pdf',
@@ -55,6 +64,7 @@ export const FILE_TOOLS = [
     slug: 'split-pdf',
     route: '/file-tools/split-pdf',
     description: 'Separate one PDF into individual pages or extract specific page ranges.',
+    description: 'Separate a PDF into individual pages or extract custom page ranges.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'available',
@@ -63,8 +73,12 @@ export const FILE_TOOLS = [
     iconBg: 'bg-indigo-100 text-indigo-700',
     metaTitle: 'Split PDF Online Free – Extract Pages from PDF | ResumeForge',
     metaDescription: 'Split PDF pages online for free. Extract custom page ranges or save all pages as separate PDF documents directly in your browser.',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Split PDF Online Free – Extract PDF Pages | ResumeForge',
+    metaDescription: 'Split PDF pages online for free. Extract custom page ranges or save all pages as separate PDF documents.',
     accept: { 'application/pdf': ['.pdf'] },
     acceptSummary: 'PDF documents only (.pdf)',
+    acceptSummary: 'PDF document (.pdf)',
     multiple: false,
     maxFiles: 1,
     maxFileSizeMB: 60,
@@ -80,6 +94,7 @@ export const FILE_TOOLS = [
         answer: 'You can choose "All Pages as ZIP" to separate every page, or choose "Custom Range" and type commas or dashes like "1-3, 5, 7".'
       }
     ]
+    maxFileSizeMB: 80
   },
   {
     id: 'compress-pdf',
@@ -87,16 +102,20 @@ export const FILE_TOOLS = [
     slug: 'compress-pdf',
     route: '/file-tools/compress-pdf',
     description: 'Reduce PDF file size while keeping visual clarity for emails and portals.',
+    description: 'Reduce PDF file size while keeping visual clarity for emails and job applications.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'available',
     icon: 'Minimize2',
     badgeColor: 'bg-sky-50 text-sky-700 border-sky-200',
     iconBg: 'bg-sky-100 text-sky-700',
+    pastel: 'bg-emerald-50 text-emerald-600',
     metaTitle: 'Compress PDF Online Free – Reduce PDF File Size | ResumeForge',
     metaDescription: 'Reduce your PDF file size online without losing readability. Instant client-side compression for job applications, emails, and uploads.',
+    metaDescription: 'Reduce your PDF file size online with stream optimization. Private client-side compression directly in your browser.',
     accept: { 'application/pdf': ['.pdf'] },
     acceptSummary: 'PDF documents only (.pdf)',
+    acceptSummary: 'PDF document (.pdf)',
     multiple: false,
     maxFiles: 1,
     maxFileSizeMB: 100,
@@ -112,6 +131,7 @@ export const FILE_TOOLS = [
         answer: 'No. The standard compression mode optimizes PDF streams and object tables losslessly, ensuring vector fonts and layout lines stay crisp.'
       }
     ]
+    maxFileSizeMB: 100
   },
   {
     id: 'pdf-to-jpg',
@@ -125,10 +145,13 @@ export const FILE_TOOLS = [
     icon: 'Image',
     badgeColor: 'bg-amber-50 text-amber-700 border-amber-200',
     iconBg: 'bg-amber-100 text-amber-700',
+    pastel: 'bg-amber-50 text-amber-600',
     metaTitle: 'PDF to JPG Converter Free Online | ResumeForge',
     metaDescription: 'Convert PDF pages into high quality JPG images online. Export single pages as JPG or download all pages packaged in a ZIP.',
+    metaDescription: 'Convert PDF pages into high quality JPG images online. Export single pages or download all pages in a ZIP archive.',
     accept: { 'application/pdf': ['.pdf'] },
     acceptSummary: 'PDF documents only (.pdf)',
+    acceptSummary: 'PDF document (.pdf)',
     multiple: false,
     maxFiles: 1,
     maxFileSizeMB: 50,
@@ -144,6 +167,7 @@ export const FILE_TOOLS = [
         answer: 'If your PDF contains multiple pages, ResumeForge bundles all converted high-res JPG files into a single convenient ZIP file.'
       }
     ]
+    maxFileSizeMB: 60
   },
   {
     id: 'jpg-to-pdf',
@@ -151,6 +175,11 @@ export const FILE_TOOLS = [
     slug: 'jpg-to-pdf',
     route: '/file-tools/jpg-to-pdf',
     description: 'Transform JPG, PNG, or WebP images into a single professional PDF document.',
+    id: 'pdf-to-png',
+    title: 'PDF to PNG',
+    slug: 'pdf-to-png',
+    route: '/file-tools/pdf-to-png',
+    description: 'Render PDF document pages into lossless PNG graphics.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'available',
@@ -176,6 +205,15 @@ export const FILE_TOOLS = [
         answer: 'Yes! Upload multiple images at once, rearrange their order with the arrow buttons, and click Convert.'
       }
     ]
+    icon: 'ImagePlus',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'PDF to PNG Converter Free Online | ResumeForge',
+    metaDescription: 'Convert PDF document pages into crisp PNG image files. Fast and private client-side export.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 60
   },
   {
     id: 'pdf-to-word',
@@ -186,12 +224,21 @@ export const FILE_TOOLS = [
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'coming-soon',
+    status: 'available',
     icon: 'FileText',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'PDF to Word Converter Online | ResumeForge',
     metaDescription: 'Convert PDF files to editable DOCX documents online. Coming soon to ResumeForge file tools.',
     features: ['Accurate typography preservation', 'Editable paragraph conversion', 'Table structure recognition']
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'PDF to Word Converter Online Free | ResumeForge',
+    metaDescription: 'Convert PDF files into genuine editable Microsoft Word DOCX documents directly in your web browser.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 50
   },
   {
     id: 'word-to-pdf',
@@ -199,6 +246,11 @@ export const FILE_TOOLS = [
     slug: 'word-to-pdf',
     route: '/file-tools/word-to-pdf',
     description: 'Transform DOCX documents into clean, immutable PDF files.',
+    id: 'jpg-to-pdf',
+    title: 'JPG to PDF',
+    slug: 'jpg-to-pdf',
+    route: '/file-tools/jpg-to-pdf',
+    description: 'Transform JPG images into a single professional PDF document.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'coming-soon',
@@ -208,6 +260,16 @@ export const FILE_TOOLS = [
     metaTitle: 'Word to PDF Converter Online | ResumeForge',
     metaDescription: 'Convert Word DOCX files into PDF documents online. Coming soon to ResumeForge file tools.',
     features: ['Flawless font embedding', 'Fixed print margins', 'Cross-platform fidelity']
+    status: 'available',
+    icon: 'FileImage',
+    pastel: 'bg-rose-50 text-rose-600',
+    metaTitle: 'JPG to PDF Converter Free Online | ResumeForge',
+    metaDescription: 'Convert JPG images into a single PDF document online. Reorder images and download instantly.',
+    accept: { 'image/jpeg': ['.jpg', '.jpeg'] },
+    acceptSummary: 'JPG/JPEG images (.jpg, .jpeg)',
+    multiple: true,
+    maxFiles: 50,
+    maxFileSizeMB: 50
   },
   {
     id: 'pdf-to-png',
@@ -231,15 +293,44 @@ export const FILE_TOOLS = [
     slug: 'png-to-pdf',
     route: '/file-tools/png-to-pdf',
     description: 'Combine transparent PNG graphics and screenshots into a PDF.',
+    description: 'Convert PNG graphics and screenshots into a clean PDF document.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'coming-soon',
+    status: 'available',
     icon: 'FileCheck',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'PNG to PDF Converter Online | ResumeForge',
     metaDescription: 'Convert PNG graphics to PDF documents. Coming soon to ResumeForge.',
     features: ['Alpha transparency preservation', 'Multi-image sequencing', 'Custom margin control']
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'PNG to PDF Converter Online Free | ResumeForge',
+    metaDescription: 'Combine PNG images into a PDF document online. High quality client-side conversion.',
+    accept: { 'image/png': ['.png'] },
+    acceptSummary: 'PNG images (.png)',
+    multiple: true,
+    maxFiles: 50,
+    maxFileSizeMB: 50
+  },
+  {
+    id: 'word-to-pdf',
+    title: 'Word to PDF',
+    slug: 'word-to-pdf',
+    route: '/file-tools/word-to-pdf',
+    description: 'Convert Microsoft Word (.docx) documents into standard A4 PDF files.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'FileCode2',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Word to PDF Converter Online Free | ResumeForge',
+    metaDescription: 'Convert DOCX Word documents into clean PDF files online without installing software.',
+    accept: { 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'] },
+    acceptSummary: 'Word documents (.docx)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
   },
   {
     id: 'rotate-pdf',
@@ -247,15 +338,25 @@ export const FILE_TOOLS = [
     slug: 'rotate-pdf',
     route: '/file-tools/rotate-pdf',
     description: 'Permanently rotate sideways or upside-down PDF pages by 90, 180, or 270 degrees.',
+    description: 'Permanently rotate PDF pages by 90°, 180°, or 270° degrees.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'coming-soon',
+    status: 'available',
     icon: 'RotateCw',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'Rotate PDF Online | ResumeForge',
     metaDescription: 'Rotate PDF pages permanently online. Coming soon to ResumeForge.',
     features: ['Per-page rotation preview', 'Bulk 90° clockwise/counter-clockwise', 'Lossless metadata preservation']
+    pastel: 'bg-amber-50 text-amber-600',
+    metaTitle: 'Rotate PDF Pages Online Free | ResumeForge',
+    metaDescription: 'Rotate PDF pages permanently online. Choose rotation angle and save your document.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
   },
   {
     id: 'reorder-pdf-pages',
@@ -263,19 +364,376 @@ export const FILE_TOOLS = [
     slug: 'reorder-pdf-pages',
     route: '/file-tools/reorder-pdf-pages',
     description: 'Rearrange, sort, or delete individual pages inside a multi-page PDF.',
+    description: 'Rearrange and sort pages inside a multi-page PDF document.',
     category: 'pdf',
     categoryLabel: 'PDF Tools',
     status: 'coming-soon',
+    status: 'available',
     icon: 'ArrowUpDown',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'Reorder PDF Pages Online | ResumeForge',
     metaDescription: 'Rearrange and organize pages in your PDF file with visual drag and drop. Coming soon.',
     features: ['Visual page grid', 'Drag-and-drop page sequencing', 'Single-click page deletion']
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'Reorder PDF Pages Online Free | ResumeForge',
+    metaDescription: 'Rearrange and sort pages in your PDF file with visual page controls.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'extract-pdf-pages',
+    title: 'Extract PDF Pages',
+    slug: 'extract-pdf-pages',
+    route: '/file-tools/extract-pdf-pages',
+    description: 'Select specific pages from a PDF and save them as a new document.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Copy',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Extract PDF Pages Online Free | ResumeForge',
+    metaDescription: 'Extract specific pages from a PDF file online. Create a new document containing only chosen pages.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'delete-pdf-pages',
+    title: 'Delete PDF Pages',
+    slug: 'delete-pdf-pages',
+    route: '/file-tools/delete-pdf-pages',
+    description: 'Remove unwanted pages from a PDF and export the remaining document.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Trash2',
+    pastel: 'bg-rose-50 text-rose-600',
+    metaTitle: 'Delete PDF Pages Online Free | ResumeForge',
+    metaDescription: 'Delete unwanted pages from your PDF file online. Download the cleaned document.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'pdf-metadata',
+    title: 'PDF Metadata',
+    slug: 'pdf-metadata',
+    route: '/file-tools/pdf-metadata',
+    description: 'View and modify PDF metadata properties such as Title, Author, and Subject.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Sliders',
+    pastel: 'bg-slate-100 text-slate-700',
+    metaTitle: 'Edit PDF Metadata Online Free | ResumeForge',
+    metaDescription: 'View and edit document Title, Author, Subject, and Keywords in your PDF online.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'protect-pdf',
+    title: 'Protect PDF',
+    slug: 'protect-pdf',
+    route: '/file-tools/protect-pdf',
+    description: 'Secure your PDF file with permission security and protection keys.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Lock',
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'Protect PDF Online Free | ResumeForge',
+    metaDescription: 'Protect your PDF documents with custom access permissions online.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'unlock-pdf',
+    title: 'Unlock PDF',
+    slug: 'unlock-pdf',
+    route: '/file-tools/unlock-pdf',
+    description: 'Remove access restrictions and save an open copy of your PDF document.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Unlock',
+    pastel: 'bg-amber-50 text-amber-600',
+    metaTitle: 'Unlock PDF Online Free | ResumeForge',
+    metaDescription: 'Unlock restricted PDF files and export an unrestricted version.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'watermark-pdf',
+    title: 'Watermark PDF',
+    slug: 'watermark-pdf',
+    route: '/file-tools/watermark-pdf',
+    description: 'Add a custom text watermark with configurable opacity, size, and rotation.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Stamp',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'Add Watermark to PDF Online Free | ResumeForge',
+    metaDescription: 'Overlay text watermarks onto PDF pages with custom transparency and rotation.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'add-page-numbers',
+    title: 'Add Page Numbers',
+    slug: 'add-page-numbers',
+    route: '/file-tools/add-page-numbers',
+    description: 'Number PDF pages with customizable positioning, numbering format, and starting offset.',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'Hash',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Add Page Numbers to PDF Online Free | ResumeForge',
+    metaDescription: 'Insert page numbers into your PDF document with custom positioning and formats.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 80
+  },
+  {
+    id: 'pdf-to-txt',
+    title: 'PDF to Text',
+    slug: 'pdf-to-txt',
+    route: '/file-tools/pdf-to-txt',
+    description: 'Extract raw selectable text from your PDF into a clean text document (.txt).',
+    category: 'pdf',
+    categoryLabel: 'PDF Tools',
+    status: 'available',
+    icon: 'FileText',
+    pastel: 'bg-slate-100 text-slate-700',
+    metaTitle: 'PDF to Text Converter Online Free | ResumeForge',
+    metaDescription: 'Extract text from PDF files online. Free, fast client-side text extractor directly in your browser.',
+    accept: { 'application/pdf': ['.pdf'] },
+    acceptSummary: 'PDF document (.pdf)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 60
   },
 
   // ==========================================
   // CATEGORY 2: DOCUMENT TOOLS
+  // CATEGORY 2: IMAGE TOOLS (10 Tools)
+  // ==========================================
+  {
+    id: 'webp-to-jpg',
+    title: 'WebP to JPG',
+    slug: 'webp-to-jpg',
+    route: '/file-tools/webp-to-jpg',
+    description: 'Convert modern WebP images into universally compatible JPG format.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Image',
+    pastel: 'bg-amber-50 text-amber-600',
+    metaTitle: 'WebP to JPG Converter Online Free | ResumeForge',
+    metaDescription: 'Convert WebP images to JPG format online. Fast in-browser conversion with quality control.',
+    accept: { 'image/webp': ['.webp'] },
+    acceptSummary: 'WebP images (.webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'webp-to-png',
+    title: 'WebP to PNG',
+    slug: 'webp-to-png',
+    route: '/file-tools/webp-to-png',
+    description: 'Convert WebP image files to transparent PNG graphics.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'ImagePlus',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'WebP to PNG Converter Online Free | ResumeForge',
+    metaDescription: 'Convert WebP images to PNG with transparency preservation directly in your browser.',
+    accept: { 'image/webp': ['.webp'] },
+    acceptSummary: 'WebP images (.webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'jpg-to-png',
+    title: 'JPG to PNG',
+    slug: 'jpg-to-png',
+    route: '/file-tools/jpg-to-png',
+    description: 'Convert JPG photos into lossless PNG image files.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'RefreshCw',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'JPG to PNG Converter Online Free | ResumeForge',
+    metaDescription: 'Convert JPG photos to PNG format online. High quality client-side image conversion.',
+    accept: { 'image/jpeg': ['.jpg', '.jpeg'] },
+    acceptSummary: 'JPG/JPEG images (.jpg, .jpeg)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'png-to-jpg',
+    title: 'PNG to JPG',
+    slug: 'png-to-jpg',
+    route: '/file-tools/png-to-jpg',
+    description: 'Convert PNG graphics into lightweight JPG images with custom quality.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'RefreshCw',
+    pastel: 'bg-rose-50 text-rose-600',
+    metaTitle: 'PNG to JPG Converter Online Free | ResumeForge',
+    metaDescription: 'Convert PNG images to JPG format online. Reduce file weight for web and email sharing.',
+    accept: { 'image/png': ['.png'] },
+    acceptSummary: 'PNG images (.png)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'jpg-to-webp',
+    title: 'JPG to WebP',
+    slug: 'jpg-to-webp',
+    route: '/file-tools/jpg-to-webp',
+    description: 'Convert JPG images to ultra-efficient WebP format for fast web delivery.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Sparkles',
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'JPG to WebP Converter Online Free | ResumeForge',
+    metaDescription: 'Convert JPG photos to WebP format online. Reduce file weight with modern compression.',
+    accept: { 'image/jpeg': ['.jpg', '.jpeg'] },
+    acceptSummary: 'JPG/JPEG images (.jpg, .jpeg)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'png-to-webp',
+    title: 'PNG to WebP',
+    slug: 'png-to-webp',
+    route: '/file-tools/png-to-webp',
+    description: 'Convert PNG graphics to WebP format while preserving transparency.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Sparkles',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'PNG to WebP Converter Online Free | ResumeForge',
+    metaDescription: 'Convert PNG images to transparent WebP format online directly in your browser.',
+    accept: { 'image/png': ['.png'] },
+    acceptSummary: 'PNG images (.png)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 30
+  },
+  {
+    id: 'compress-image',
+    title: 'Compress Image',
+    slug: 'compress-image',
+    route: '/file-tools/compress-image',
+    description: 'Reduce JPG, PNG, and WebP file sizes while preserving clarity.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Minimize2',
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'Compress Image Online Free | ResumeForge',
+    metaDescription: 'Compress JPG and PNG images online. Adjust quality and dimensions to reduce file size.',
+    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    acceptSummary: 'Images (.jpg, .png, .webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 40
+  },
+  {
+    id: 'resize-image',
+    title: 'Resize Image',
+    slug: 'resize-image',
+    route: '/file-tools/resize-image',
+    description: 'Change pixel dimensions of images with aspect ratio locking.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Maximize2',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'Resize Image Online Free | ResumeForge',
+    metaDescription: 'Resize image dimensions online with aspect ratio lock. Fast and private in-browser resizing.',
+    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    acceptSummary: 'Images (.jpg, .png, .webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 40
+  },
+  {
+    id: 'convert-image',
+    title: 'Convert Image',
+    slug: 'convert-image',
+    route: '/file-tools/convert-image',
+    description: 'Universal image format converter: switch between JPG, PNG, and WebP.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'Sparkles',
+    pastel: 'bg-amber-50 text-amber-600',
+    metaTitle: 'Convert Image Formats Online Free | ResumeForge',
+    metaDescription: 'Universal image format converter. Convert images between JPG, PNG, and WebP instantly.',
+    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    acceptSummary: 'Images (.jpg, .png, .webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 40
+  },
+  {
+    id: 'rotate-image',
+    title: 'Rotate Image',
+    slug: 'rotate-image',
+    route: '/file-tools/rotate-image',
+    description: 'Rotate photos and graphics 90°, 180°, or 270° degrees clockwise.',
+    category: 'image',
+    categoryLabel: 'Image Tools',
+    status: 'available',
+    icon: 'RotateCw',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Rotate Image Online Free | ResumeForge',
+    metaDescription: 'Rotate photos and images online by 90, 180, or 270 degrees in your browser.',
+    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] },
+    acceptSummary: 'Images (.jpg, .png, .webp)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 40
+  },
+
+  // ==========================================
+  // CATEGORY 3: DOCUMENT TOOLS (4 Tools)
   // ==========================================
   {
     id: 'text-to-pdf',
@@ -283,19 +741,68 @@ export const FILE_TOOLS = [
     slug: 'text-to-pdf',
     route: '/file-tools/text-to-pdf',
     description: 'Convert plain text (.txt) files or code snippets into formatted PDF pages.',
+    description: 'Convert plain text (.txt) or typed notes into formatted PDF documents.',
     category: 'document',
     categoryLabel: 'Document Tools',
     status: 'coming-soon',
+    status: 'available',
     icon: 'FileText',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'Text to PDF Converter Online | ResumeForge',
     metaDescription: 'Convert plain text files and code into clean PDFs. Coming soon to ResumeForge.',
     features: ['Monospace & serif font options', 'Automatic line wrapping & pagination', 'Configurable margins']
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'Text to PDF Converter Online Free | ResumeForge',
+    metaDescription: 'Convert plain text notes and TXT files into clean A4 PDF documents online.',
+    accept: { 'text/plain': ['.txt'] },
+    acceptSummary: 'Plain text files (.txt)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 10
+  },
+  {
+    id: 'html-to-pdf',
+    title: 'HTML to PDF',
+    slug: 'html-to-pdf',
+    route: '/file-tools/html-to-pdf',
+    description: 'Convert HTML code snippets or HTML documents into PDF files.',
+    category: 'document',
+    categoryLabel: 'Document Tools',
+    status: 'available',
+    icon: 'Code2',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'HTML to PDF Converter Online Free | ResumeForge',
+    metaDescription: 'Convert HTML documents or code snippets into clean PDF pages online.',
+    accept: { 'text/html': ['.html', '.htm'] },
+    acceptSummary: 'HTML documents (.html, .htm)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 15
+  },
+  {
+    id: 'markdown-to-pdf',
+    title: 'Markdown to PDF',
+    slug: 'markdown-to-pdf',
+    route: '/file-tools/markdown-to-pdf',
+    description: 'Convert Markdown notes (.md) or code documentation into formatted PDF pages.',
+    category: 'document',
+    categoryLabel: 'Document Tools',
+    status: 'available',
+    icon: 'FileCode',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Markdown to PDF Converter Online Free | ResumeForge',
+    metaDescription: 'Convert Markdown (.md) documents and notes into clean PDF files online.',
+    accept: { 'text/markdown': ['.md', '.markdown'] },
+    acceptSummary: 'Markdown files (.md, .markdown)',
+    multiple: false,
+    maxFiles: 1,
+    maxFileSizeMB: 15
   },
 
   // ==========================================
   // CATEGORY 3: FILE UTILITIES
+  // CATEGORY 4: FILE UTILITIES (5 Tools)
   // ==========================================
   {
     id: 'create-zip',
@@ -309,8 +816,10 @@ export const FILE_TOOLS = [
     icon: 'Archive',
     badgeColor: 'bg-teal-50 text-teal-700 border-teal-200',
     iconBg: 'bg-teal-100 text-teal-700',
+    pastel: 'bg-amber-50 text-amber-600',
     metaTitle: 'Create ZIP Archive Online Free | ResumeForge',
     metaDescription: 'Zip and compress multiple files into a single archive file online. Free, secure client-side compression without uploading files.',
+    metaDescription: 'Zip and compress multiple files into a single archive file online. Free, secure client-side compression.',
     accept: { '*/*': [] },
     acceptSummary: 'Any files (documents, images, PDFs, archives)',
     multiple: true,
@@ -328,6 +837,7 @@ export const FILE_TOOLS = [
         answer: 'You can add any files: PDFs, images, spreadsheets, code files, documents, and videos.'
       }
     ]
+    maxFileSizeMB: 150
   },
   {
     id: 'extract-zip',
@@ -335,6 +845,7 @@ export const FILE_TOOLS = [
     slug: 'extract-zip',
     route: '/file-tools/extract-zip',
     description: 'Open, inspect, and extract files from a .zip archive directly in your browser.',
+    description: 'Inspect and extract files from a .zip archive directly in your browser.',
     category: 'utility',
     categoryLabel: 'File Utilities',
     status: 'available',
@@ -343,12 +854,16 @@ export const FILE_TOOLS = [
     iconBg: 'bg-blue-100 text-blue-700',
     metaTitle: 'Extract ZIP Archive Online Free – Unzip Files | ResumeForge',
     metaDescription: 'Unzip and extract files from ZIP archives directly in your browser. Download individual files or all files with zero server uploads.',
+    pastel: 'bg-blue-50 text-blue-600',
+    metaTitle: 'Extract ZIP Archive Online Free | ResumeForge',
+    metaDescription: 'Unzip and extract files from ZIP archives directly in your browser. Download individual files or all files.',
     accept: {
       'application/zip': ['.zip'],
       'application/x-zip-compressed': ['.zip'],
       'multipart/x-zip': ['.zip']
     },
     acceptSummary: 'ZIP archives only (.zip)',
+    acceptSummary: 'ZIP archives (.zip)',
     multiple: false,
     maxFiles: 1,
     maxFileSizeMB: 100,
@@ -364,6 +879,26 @@ export const FILE_TOOLS = [
         answer: 'No! ResumeForge unpacks standard ZIP archives natively inside your browser.'
       }
     ]
+    maxFileSizeMB: 100
+  },
+  {
+    id: 'combine-files',
+    title: 'Combine Files',
+    slug: 'combine-files',
+    route: '/file-tools/combine-files',
+    description: 'Package multiple PDFs, images, and text files into a single unified PDF.',
+    category: 'utility',
+    categoryLabel: 'File Utilities',
+    status: 'available',
+    icon: 'Package',
+    pastel: 'bg-purple-50 text-purple-600',
+    metaTitle: 'Combine Multiple Files to PDF Online Free | ResumeForge',
+    metaDescription: 'Merge PDFs, images, and text files into a single comprehensive PDF document online.',
+    accept: { '*/*': ['.pdf', '.jpg', '.jpeg', '.png', '.txt'] },
+    acceptSummary: 'PDFs, Images, and Text files',
+    multiple: true,
+    maxFiles: 40,
+    maxFileSizeMB: 80
   },
   {
     id: 'rename-files',
@@ -371,15 +906,25 @@ export const FILE_TOOLS = [
     slug: 'rename-files',
     route: '/file-tools/rename-files',
     description: 'Batch rename multiple files with prefixes, suffixes, numbering, and patterns.',
+    description: 'Batch rename multiple files with prefix, suffix, numbering, and patterns.',
     category: 'utility',
     categoryLabel: 'File Utilities',
     status: 'coming-soon',
+    status: 'available',
     icon: 'FileEdit',
     badgeColor: 'bg-slate-100 text-slate-600 border-slate-200',
     iconBg: 'bg-slate-100 text-slate-600',
     metaTitle: 'Batch File Renamer Online | ResumeForge',
     metaDescription: 'Rename files in bulk online with pattern replacements. Coming soon.',
     features: ['Sequential numbering', 'Case conversion', 'Search & replace strings']
+    pastel: 'bg-rose-50 text-rose-600',
+    metaTitle: 'Batch Rename Files Online Free | ResumeForge',
+    metaDescription: 'Batch rename multiple files with sequential numbering and pattern replacement. Download as ZIP.',
+    accept: { '*/*': [] },
+    acceptSummary: 'Any files',
+    multiple: true,
+    maxFiles: 50,
+    maxFileSizeMB: 100
   },
   {
     id: 'combine-files',
@@ -387,6 +932,11 @@ export const FILE_TOOLS = [
     slug: 'combine-files',
     route: '/file-tools/combine-files',
     description: 'Package multiple heterogeneous files into an organized portfolio package.',
+    id: 'download-as-zip',
+    title: 'Download Multiple Files as ZIP',
+    slug: 'download-as-zip',
+    route: '/file-tools/download-as-zip',
+    description: 'Bundle any selection of files into an organized, compressed ZIP download.',
     category: 'utility',
     categoryLabel: 'File Utilities',
     status: 'coming-soon',
@@ -396,15 +946,27 @@ export const FILE_TOOLS = [
     metaTitle: 'Combine Files Online | ResumeForge',
     metaDescription: 'Combine multiple files into a portfolio bundle. Coming soon.',
     features: ['Unified document packaging', 'Index table of contents', 'Multi-format compilation']
+    status: 'available',
+    icon: 'Download',
+    pastel: 'bg-emerald-50 text-emerald-600',
+    metaTitle: 'Download Multiple Files as ZIP Online Free | ResumeForge',
+    metaDescription: 'Package multiple documents and files into a single ZIP file for easy sharing.',
+    accept: { '*/*': [] },
+    acceptSummary: 'Any files',
+    multiple: true,
+    maxFiles: 50,
+    maxFileSizeMB: 150
   }
 ];
 
 export const getToolBySlug = (slug) => {
   return FILE_TOOLS.find(tool => tool.slug === slug || tool.id === slug);
+  return FILE_TOOLS.find(t => t.slug === slug || t.id === slug);
 };
 
 export const getToolsByCategory = (category) => {
   if (!category || category === 'all') return FILE_TOOLS;
   return FILE_TOOLS.filter(tool => tool.category === category);
+  return FILE_TOOLS.filter(t => t.category === category);
 };
 
