@@ -24,8 +24,7 @@ export const FileToolsIndex = () => {
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'available' | 'coming-soon'
 
   const breadcrumbs = [
-    { label: 'Home', path: '/' },
-    { label: 'File Tools', path: '/file-tools' }
+    { label: 'FileForge Home', path: '/file-tools' }
   ];
 
   const filteredTools = useMemo(() => {
@@ -57,7 +56,7 @@ export const FileToolsIndex = () => {
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'ResumeForge Free PDF & File Tools',
+    name: 'FileForge Free PDF & File Tools',
     applicationCategory: 'UtilityApplication',
     operatingSystem: 'All',
     description: 'Free online tools to merge, split, compress, convert, and manage PDF and common files directly in your web browser.',
@@ -71,9 +70,10 @@ export const FileToolsIndex = () => {
   return (
     <div className="min-h-screen bg-[#F7F7FA] flex flex-col">
       <SEO
-        title="Free PDF & File Tools Online | ResumeForge"
-        description="Free online tools to merge, split, compress, convert, and manage PDF and common files directly in your web browser. 100% private and secure."
+        title="FileForge — Free PDF & File Tools"
+        description="FileForge provides free online PDF and file tools for converting, merging, splitting, compressing, and managing files directly in your browser."
         canonicalUrl="https://resumeforge.app/file-tools"
+        product="file"
         schemaData={schemaData}
       />
 
@@ -85,17 +85,21 @@ export const FileToolsIndex = () => {
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider border border-brand-200/70 mb-5">
-              <Sparkles className="w-3.5 h-3.5 text-brand-600" />
-              <span>Free In-Browser Utility Platform</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-200/70 mb-5">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <span>FileForge • 100% In-Browser Platform</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-bold text-[#2F3038] tracking-tight">
-              Free PDF & <span className="text-brand-600">File Tools</span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-[#2F3038] tracking-tight">
+              File<span className="text-indigo-600">Forge</span>
             </h1>
 
-            <p className="mt-4 text-base sm:text-lg text-[#6F707A] leading-relaxed font-normal">
-              Convert, compress, merge, split, and manage your files online.
+            <p className="mt-3 text-lg sm:text-xl font-semibold text-slate-800 tracking-tight">
+              Free online PDF and file tools.
+            </p>
+
+            <p className="mt-2 text-sm sm:text-base text-[#6F707A] leading-relaxed font-normal max-w-2xl mx-auto">
+              Convert, compress, merge, split, and manage your documents directly in your web browser. 100% private with zero server uploads.
             </p>
 
             {/* Quick Guarantees */}
@@ -231,7 +235,7 @@ export const FileToolsIndex = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Why Use ResumeForge File Tools?
+              Why Use FileForge?
             </h2>
             <p className="text-sm text-slate-600 mt-2">
               Engineered for job seekers and professionals who value privacy, speed, and simplicity.
@@ -276,11 +280,14 @@ export const FileToolsIndex = () => {
       <section className="py-12 bg-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
+            <div className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-brand-400 mb-1">
+              <span>Sister Product</span>
+            </div>
             <h3 className="text-xl sm:text-2xl font-bold">
               Looking to craft an interview-ready resume?
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
-              ResumeForge includes modern, ATS-ready templates and instant client-side PDF export.
+              Switch over to our sister product <strong>ResumeForge</strong> for modern, ATS-ready templates and instant client-side PDF export.
             </p>
           </div>
           <Link to="/builder">
@@ -291,7 +298,7 @@ export const FileToolsIndex = () => {
               iconPosition="right"
               className="shadow-md shadow-brand-500/20 flex-shrink-0"
             >
-              Create My Resume
+              Open ResumeForge
             </Button>
           </Link>
         </div>

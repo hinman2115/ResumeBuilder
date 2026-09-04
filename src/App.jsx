@@ -2,8 +2,8 @@ import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { ResumeProvider } from './context/ResumeContext';
-import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
+import { AppNavbar } from './components/layout/AppNavbar';
+import { AppFooter } from './components/layout/AppFooter';
 import { Toast } from './components/common/Toast';
 import { trackVisitor } from './services/statistics';
 
@@ -95,7 +95,7 @@ export const App = () => {
       <Router>
         <ScrollToTop />
         <div className="min-h-screen flex flex-col bg-[#F7F7FA] text-[#2F3038] font-sans selection:bg-slate-800 selection:text-white">
-          <Navbar />
+          <AppNavbar />
           <main className="flex-1">
             <Routes>
               {/* Primary App Routes */}
@@ -242,7 +242,7 @@ export const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
-          <Footer />
+          <AppFooter />
           <Toast />
         </div>
       </Router>

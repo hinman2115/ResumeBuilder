@@ -28,8 +28,8 @@ export const ToolLayout = ({
     .slice(0, 3);
 
   const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'File Tools', path: '/file-tools' },
+    { label: 'FileForge', path: '/file-tools' },
+    { label: tool.categoryLabel, path: `/file-tools?cat=${tool.category}` },
     { label: tool.title, path: tool.route }
   ];
 
@@ -50,9 +50,10 @@ export const ToolLayout = ({
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F7FA]">
       <SEO
-        title={tool.metaTitle || `${tool.title} Online Free | ResumeForge`}
+        title={tool.metaTitle || `${tool.title} Online Free — FileForge`}
         description={tool.metaDescription || tool.description}
         canonicalUrl={`https://resumeforge.app${tool.route}`}
+        product="file"
         schemaData={toolSchema}
       />
 
@@ -64,8 +65,8 @@ export const ToolLayout = ({
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-50 text-brand-700 border border-brand-200/60 mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-brand-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200/60 mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
               <span>{tool.categoryLabel}</span>
             </div>
 
@@ -203,7 +204,7 @@ export const ToolLayout = ({
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                Explore More File Tools
+                Explore More FileForge Tools
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
                 Free tools to convert, compress, and organize your documents.
@@ -226,22 +227,25 @@ export const ToolLayout = ({
         </div>
       </section>
 
-      {/* Cross-Promo Banner for Resume Builder */}
+      {/* Cross-Promo Banner for ResumeForge */}
       <section className="py-10 bg-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div>
+            <div className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-brand-400 mb-1">
+              <span>Sister Product</span>
+            </div>
             <h3 className="text-lg sm:text-xl font-bold">
               Need to create an interview-winning resume?
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
-              Use our 100% free resume builder with ATS-friendly templates and instant PDF export.
+              Use our sister product <strong>ResumeForge</strong> for ATS-friendly templates, live preview, and instant PDF export.
             </p>
           </div>
           <Link
             to="/builder"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold shadow-md transition-colors flex-shrink-0"
           >
-            <span>Create My Resume</span>
+            <span>Open ResumeForge</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

@@ -18,7 +18,7 @@ export const PdfMetadata = () => {
     author: '',
     subject: '',
     keywords: '',
-    producer: 'ResumeForge File Tools'
+    producer: 'FileForge PDF Tools'
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -75,7 +75,7 @@ export const PdfMetadata = () => {
       author: '',
       subject: '',
       keywords: '',
-      producer: 'ResumeForge File Tools'
+      producer: 'FileForge PDF Tools'
     });
     setResult(null);
     setError(null);

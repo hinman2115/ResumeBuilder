@@ -509,20 +509,20 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* More than a Resume Builder - File Tools Feature Promo */}
+      {/* Sister Product Spotlight - FileForge Feature Promo */}
       <section className="py-16 bg-slate-100/70 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-white border border-slate-200/80 p-8 sm:p-12 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider mb-3 border border-brand-200/60">
-                <Sparkles className="w-3.5 h-3.5 text-brand-600" />
-                <span>More than a Resume Builder</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-3 border border-indigo-200/60">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Sister Product • FileForge</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                Free PDF &amp; File Tools
+                Need PDF &amp; File Utilities? Try FileForge
               </h2>
               <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-                Merge, split, compress, convert, and manage your documents directly inside your browser. 100% free, completely private, and with zero files uploaded to remote servers.
+                Merge, split, compress, convert, and organize your files with our dedicated online tool suite. 100% free, private in-browser processing with zero server uploads.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500">
                 <span className="flex items-center gap-1.5">
@@ -549,7 +549,7 @@ export const Home = () => {
                   iconPosition="right"
                   className="shadow-md shadow-brand-500/20 whitespace-nowrap"
                 >
-                  Explore File Tools
+                  Explore FileForge
                 </Button>
               </Link>
             </div>
