@@ -22,31 +22,22 @@ export const FileList = ({
 
   const getFileIcon = (file) => {
     const name = file.name.toLowerCase();
-    if (name.endsWith('.pdf')) return <FileText className="w-5 h-5 text-rose-600" />;
     if (name.endsWith('.pdf')) return <FileText className="w-4 h-4 text-rose-600" />;
     if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png') || name.endsWith('.webp')) {
-      return <ImageIcon className="w-5 h-5 text-purple-600" />;
       return <ImageIcon className="w-4 h-4 text-purple-600" />;
     }
-    if (name.endsWith('.zip')) return <Archive className="w-5 h-5 text-amber-600" />;
-    return <File className="w-5 h-5 text-slate-500" />;
     if (name.endsWith('.zip')) return <Archive className="w-4 h-4 text-amber-600" />;
     return <File className="w-4 h-4 text-slate-500" />;
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
     <div className="w-full bg-white rounded-[16px] border border-[#E1E2E7] p-5 shadow-[0_1px_3px_rgba(47,48,56,0.04)]">
       {/* Header bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-[#F0F1F5]">
         <div>
-          <h4 className="text-sm font-bold text-slate-900">
           <h4 className="text-[15px] font-semibold text-[#2F3038]">
             Selected {files.length === 1 ? 'File' : 'Files'} ({files.length})
           </h4>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Total Size: <span className="font-semibold text-slate-700">{formatBytes(totalSize)}</span>
           <p className="text-[12px] text-[#6F707A] mt-0.5">
             Total Size: <span className="font-semibold text-[#2F3038]">{formatBytes(totalSize)}</span>
           </p>
@@ -84,7 +75,6 @@ export const FileList = ({
             <button
               type="button"
               onClick={onClearAll}
-              className="text-xs font-semibold text-slate-500 hover:text-rose-600 px-2 py-1 transition-colors"
               className="text-[12px] font-medium text-[#6F707A] hover:text-[#ef4444] px-2 py-1 transition-colors"
             >
               Clear All
@@ -94,30 +84,23 @@ export const FileList = ({
       </div>
 
       {/* Files List */}
-      <div className="mt-4 space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
       <div className="mt-3.5 space-y-2 max-h-[360px] overflow-y-auto pr-1">
         {files.map((file, idx) => (
           <div
             key={`${file.name}-${file.size}-${idx}`}
-            className="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200/70 hover:bg-slate-100/70 transition-colors"
             className="flex items-center justify-between gap-3 p-3 rounded-[12px] bg-[#F7F7FA] border border-[#E1E2E7] hover:bg-white hover:border-[#cbd5e1] transition-all"
           >
-            <div className="flex items-center gap-3 min-w-0 flex-1">
-              <span className="w-6 h-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 flex-shrink-0">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <span className="w-5 h-5 rounded-[6px] bg-white border border-[#E1E2E7] flex items-center justify-center text-[11px] font-bold text-[#6F707A] flex-shrink-0">
                 {idx + 1}
               </span>
-              <div className="p-1.5 rounded-lg bg-white border border-slate-200/80 flex-shrink-0">
               <div className="p-1.5 rounded-[8px] bg-white border border-[#E1E2E7] flex-shrink-0">
                 {getFileIcon(file)}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-semibold text-slate-900 truncate">
                 <p className="text-[13px] font-semibold text-[#2F3038] truncate">
                   {file.name}
                 </p>
-                <p className="text-[11px] text-slate-500">
                 <p className="text-[11px] text-[#6F707A]">
                   {formatBytes(file.size)}
                 </p>
@@ -125,7 +108,6 @@ export const FileList = ({
             </div>
 
             {/* Actions: Reorder & Remove */}
-            {/* Reorder and Remove actions */}
             <div className="flex items-center gap-1">
               {allowReorder && files.length > 1 && (
                 <>
@@ -134,7 +116,6 @@ export const FileList = ({
                     disabled={idx === 0}
                     onClick={() => onMoveUp && onMoveUp(idx)}
                     title="Move Up"
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label={`Move ${file.name} up`}
                     className="p-1 rounded-[6px] text-[#6F707A] hover:text-[#2F3038] hover:bg-white disabled:opacity-25 disabled:pointer-events-none transition-colors"
                   >
@@ -145,7 +126,6 @@ export const FileList = ({
                     disabled={idx === files.length - 1}
                     onClick={() => onMoveDown && onMoveDown(idx)}
                     title="Move Down"
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
                     aria-label={`Move ${file.name} down`}
                     className="p-1 rounded-[6px] text-[#6F707A] hover:text-[#2F3038] hover:bg-white disabled:opacity-25 disabled:pointer-events-none transition-colors"
                   >
@@ -159,11 +139,9 @@ export const FileList = ({
                   type="button"
                   onClick={() => onRemove(idx)}
                   title="Remove File"
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors ml-1"
                   aria-label={`Remove ${file.name}`}
                   className="p-1.5 rounded-[6px] text-[#6F707A] hover:text-[#ef4444] hover:bg-[#fff0f0] transition-colors ml-1"
                 >
-                  <Trash2 className="w-4 h-4" />
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -174,4 +152,3 @@ export const FileList = ({
     </div>
   );
 };
-

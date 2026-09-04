@@ -6,25 +6,41 @@ import { FileList } from '../../components/fileTools/FileList';
 import { ProcessingStatus } from '../../components/fileTools/ProcessingStatus';
 import { DownloadResult } from '../../components/fileTools/DownloadResult';
 import { Button } from '../../components/common/Button';
-import { pdfToImages } from '../../utils/fileTools/pdfUtils';
+import { pdfToImages, getPdfPageCount } from '../../utils/fileTools/pdfUtils';
 import { downloadBlob } from '../../utils/fileTools/formatters';
 import { ImagePlus, AlertCircle } from 'lucide-react';
 
 export const PdfToPng = () => {
   const tool = getToolBySlug('pdf-to-png');
   const [files, setFiles] = useState([]);
+  const [pageCount, setPageCount] = useState(null);
+  const [pageScope, setPageScope] = useState('all'); // 'all' | 'custom'
+  const [customRange, setCustomRange] = useState('');
+  const [resolutionScale, setResolutionScale] = useState(2.0); // 1.0, 2.0, 3.0
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleFilesSelected = (newFiles) => {
+  const handleFilesSelected = async (newFiles) => {
     setError(null);
-    setFiles(newFiles.slice(0, 1));
+    const file = newFiles[0];
+    if (!file) return;
+
+    setFiles([file]);
+    try {
+      const count = await getPdfPageCount(file);
+      setPageCount(count);
+      setCustomRange(count > 1 ? `1-${count}` : '1');
+    } catch {
+      setPageCount(1);
+      setCustomRange('1');
+    }
   };
 
   const handleRemove = () => {
     setFiles([]);
+    setPageCount(null);
     setError(null);
     setResult(null);
   };
@@ -37,7 +53,13 @@ export const PdfToPng = () => {
       setError(null);
       setProgress(10);
 
-      const res = await pdfToImages(files[0], 'png', 1.0, 2.0, (pct) => setProgress(pct));
+      const options = {
+        format: 'image/png',
+        scale: parseFloat(resolutionScale),
+        pageRange: pageScope === 'custom' ? customRange : ''
+      };
+
+      const res = await pdfToImages(files[0], options, (pct) => setProgress(pct));
       setResult(res);
     } catch (err) {
       setError(err.message || 'An error occurred while converting PDF to PNG images.');
@@ -54,6 +76,7 @@ export const PdfToPng = () => {
 
   const handleReset = () => {
     setFiles([]);
+    setPageCount(null);
     setResult(null);
     setError(null);
     setProgress(0);
@@ -64,6 +87,7 @@ export const PdfToPng = () => {
       {result ? (
         <DownloadResult
           fileName={result.name}
+          originalFileName={files[0]?.name}
           fileSize={result.size}
           downloadLabel={result.isZip ? 'Download All Pages (ZIP)' : 'Download PNG Image'}
           additionalStats={
@@ -103,11 +127,63 @@ export const PdfToPng = () => {
                 allowAddMore={false}
               />
 
-              <div className="p-4 rounded-xl bg-purple-50/70 border border-purple-200/80 text-xs sm:text-sm text-purple-900 leading-relaxed">
-                <p className="font-bold mb-1">Lossless PNG Quality</p>
-                <p className="text-purple-700">
-                  Each PDF page is rasterized at high resolution (2x retina scale) with crisp typography and clean vector edges. Multi-page documents are packaged into a convenient ZIP archive.
-                </p>
+              {/* Conversion Options */}
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                    PNG Render Settings
+                  </h4>
+                  {pageCount && (
+                    <span className="text-xs text-slate-500 font-semibold bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                      Total: {pageCount} {pageCount === 1 ? 'Page' : 'Pages'}
+                    </span>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Pages to Convert
+                    </label>
+                    <select
+                      value={pageScope}
+                      onChange={(e) => setPageScope(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    >
+                      <option value="all">All Pages ({pageCount || 1})</option>
+                      <option value="custom">Selected Pages / Range</option>
+                    </select>
+
+                    {pageScope === 'custom' && (
+                      <input
+                        type="text"
+                        value={customRange}
+                        onChange={(e) => setCustomRange(e.target.value)}
+                        placeholder="e.g. 1, 3, 5-7"
+                        className="mt-2 w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                      />
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Resolution / Quality
+                    </label>
+                    <select
+                      value={resolutionScale}
+                      onChange={(e) => setResolutionScale(parseFloat(e.target.value))}
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    >
+                      <option value={1.0}>1x Standard (72 DPI - Fast)</option>
+                      <option value={2.0}>2x High Resolution (150 DPI - Recommended)</option>
+                      <option value={3.0}>3x Ultra Resolution (300 DPI - Print Quality)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-slate-500 pt-1">
+                  {pageCount === 1 ? 'Single page will download as a direct .png file.' : 'Multiple pages will be packaged into a zip file (pdf-pages.zip).'}
+                </div>
               </div>
 
               {error && (
@@ -135,4 +211,3 @@ export const PdfToPng = () => {
     </ToolLayout>
   );
 };
-

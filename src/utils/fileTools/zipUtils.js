@@ -180,22 +180,32 @@ export async function combineFilesToPdf(files, onProgress = null) {
       page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
     } else if (name.endsWith('.txt')) {
       const text = await file.text();
-      const page = finalPdf.addPage([595.28, 841.89]);
-      const lines = text.split('\n').slice(0, 45); // First page preview
-      lines.forEach((l, lIdx) => {
-        page.drawText(l.substring(0, 85), {
-          x: 50,
-          y: 841.89 - 50 - (lIdx * 16),
-          size: 11,
-          font,
-          color: rgb(0.2, 0.2, 0.2)
+      const lines = text.split(/\r?\n/);
+      const linesPerPage = 45;
+      for (let pIdx = 0; pIdx < Math.max(1, lines.length); pIdx += linesPerPage) {
+        const pageLines = lines.slice(pIdx, pIdx + linesPerPage);
+        const page = finalPdf.addPage([595.28, 841.89]);
+        pageLines.forEach((l, lIdx) => {
+          page.drawText(l.substring(0, 85), {
+            x: 50,
+            y: 841.89 - 50 - (lIdx * 16),
+            size: 11,
+            font,
+            color: rgb(0.2, 0.2, 0.2)
+          });
         });
-      });
+      }
+    } else {
+      throw new Error(`File "${file.name}" has an unsupported format for combining into PDF. Please provide PDF, JPG, PNG, or TXT files.`);
     }
 
     if (onProgress) {
       onProgress(Math.round(((i + 1) / files.length) * 90));
     }
+  }
+
+  if (finalPdf.getPageCount() === 0) {
+    throw new Error('No pages were generated. Please check your uploaded files.');
   }
 
   const bytes = await finalPdf.save();

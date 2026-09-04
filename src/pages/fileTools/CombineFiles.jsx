@@ -39,7 +39,7 @@ export const CombineFiles = () => {
   };
 
   const handleMoveDown = (index) => {
-    if (index === prev.length - 1) return;
+    if (index === files.length - 1) return;
     setFiles(prev => {
       const next = [...prev];
       const temp = next[index + 1];

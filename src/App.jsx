@@ -172,6 +172,7 @@ export const App = () => {
               {/* Additional Dedicated PDF Tools */}
               <Route path="/file-tools/rotate-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><RotatePdf /></Suspense>} />
               <Route path="/file-tools/reorder-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><ReorderPdf /></Suspense>} />
+              <Route path="/file-tools/reorder-pdf" element={<Suspense fallback={<FileToolsLoadingFallback />}><ReorderPdf /></Suspense>} />
               <Route path="/file-tools/extract-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><ExtractPdfPages /></Suspense>} />
               <Route path="/file-tools/delete-pdf-pages" element={<Suspense fallback={<FileToolsLoadingFallback />}><DeletePdfPages /></Suspense>} />
               <Route path="/file-tools/pdf-metadata" element={<Suspense fallback={<FileToolsLoadingFallback />}><PdfMetadata /></Suspense>} />
@@ -205,6 +206,7 @@ export const App = () => {
               {/* File Utilities */}
               <Route path="/file-tools/combine-files" element={<Suspense fallback={<FileToolsLoadingFallback />}><CombineFiles /></Suspense>} />
               <Route path="/file-tools/rename-files" element={<Suspense fallback={<FileToolsLoadingFallback />}><RenameFiles /></Suspense>} />
+              <Route path="/file-tools/rename-file" element={<Suspense fallback={<FileToolsLoadingFallback />}><RenameFiles /></Suspense>} />
               <Route path="/file-tools/download-as-zip" element={<Suspense fallback={<FileToolsLoadingFallback />}><DownloadAsZip /></Suspense>} />
 
               {/* Catch-all for any future tools */}

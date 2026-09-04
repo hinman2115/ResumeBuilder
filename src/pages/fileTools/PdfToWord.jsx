@@ -64,6 +64,8 @@ export const PdfToWord = () => {
       {result ? (
         <DownloadResult
           fileName={result.name}
+          originalFileName={result.originalName || files[0]?.name}
+          warning={result.warning}
           fileSize={result.size}
           downloadLabel="Download Word Document (.docx)"
           additionalStats={

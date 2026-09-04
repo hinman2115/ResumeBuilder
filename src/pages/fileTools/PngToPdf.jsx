@@ -13,6 +13,10 @@ import { FileCheck, AlertCircle } from 'lucide-react';
 export const PngToPdf = () => {
   const tool = getToolBySlug('png-to-pdf');
   const [files, setFiles] = useState([]);
+  const [pageSize, setPageSize] = useState('a4'); // 'a4' | 'letter' | 'original'
+  const [orientation, setOrientation] = useState('auto'); // 'auto' | 'portrait' | 'landscape'
+  const [imageFit, setImageFit] = useState('fit'); // 'fit' | 'fill' | 'original'
+  const [margin, setMargin] = useState('small'); // 'none' | 'small' | 'medium' | 'large'
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState(null);
@@ -63,7 +67,14 @@ export const PngToPdf = () => {
       setError(null);
       setProgress(15);
 
-      const res = await imagesToPdf(files, (pct) => setProgress(pct));
+      const options = {
+        pageSize,
+        orientation,
+        imageFit,
+        margin
+      };
+
+      const res = await imagesToPdf(files, options, (pct) => setProgress(pct));
       setResult(res);
     } catch (err) {
       setError(err.message || 'An error occurred while converting PNG images to PDF.');
@@ -90,12 +101,13 @@ export const PngToPdf = () => {
       {result ? (
         <DownloadResult
           fileName={result.name}
+          originalFileName={files.length === 1 ? files[0].name : `${files.length} PNG images`}
           fileSize={result.size}
           downloadLabel="Download Generated PDF"
           additionalStats={
             result.pageCount ? (
               <span className="text-xs font-bold text-slate-700 bg-slate-200/80 px-2 py-0.5 rounded-full">
-                {result.pageCount} Pages
+                {result.pageCount} Pages • {pageSize.toUpperCase()}
               </span>
             ) : null
           }
@@ -133,6 +145,82 @@ export const PngToPdf = () => {
                 accept=".png"
               />
 
+              {/* Layout and Page Options */}
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-4">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  PDF Page & Layout Settings
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Page Size */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Page Size
+                    </label>
+                    <select
+                      value={pageSize}
+                      onChange={(e) => setPageSize(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    >
+                      <option value="a4">A4 (Standard)</option>
+                      <option value="letter">US Letter</option>
+                      <option value="original">Original Image Size</option>
+                    </select>
+                  </div>
+
+                  {/* Orientation */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Orientation
+                    </label>
+                    <select
+                      value={orientation}
+                      disabled={pageSize === 'original'}
+                      onChange={(e) => setOrientation(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 disabled:opacity-50"
+                    >
+                      <option value="auto">Auto (Match Image)</option>
+                      <option value="portrait">Portrait</option>
+                      <option value="landscape">Landscape</option>
+                    </select>
+                  </div>
+
+                  {/* Image Fit */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Image Fit
+                    </label>
+                    <select
+                      value={imageFit}
+                      disabled={pageSize === 'original'}
+                      onChange={(e) => setImageFit(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 disabled:opacity-50"
+                    >
+                      <option value="fit">Fit (Keep Proportions)</option>
+                      <option value="fill">Fill (Cover Page)</option>
+                      <option value="original">Original Size</option>
+                    </select>
+                  </div>
+
+                  {/* Margins */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Margins
+                    </label>
+                    <select
+                      value={margin}
+                      onChange={(e) => setMargin(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-slate-900"
+                    >
+                      <option value="none">No Margin</option>
+                      <option value="small">Small Margin</option>
+                      <option value="medium">Medium Margin</option>
+                      <option value="large">Large Margin</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               {error && (
                 <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-center gap-2.5 text-xs sm:text-sm text-rose-700">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -149,7 +237,7 @@ export const PngToPdf = () => {
                 iconPosition="left"
                 className="w-full shadow-md shadow-brand-500/20"
               >
-                Convert {files.length} {files.length === 1 ? 'Image' : 'Images'} to PDF
+                Convert {files.length} {files.length === 1 ? 'PNG Image' : 'PNG Images'} to PDF
               </Button>
             </div>
           )}
@@ -158,4 +246,3 @@ export const PngToPdf = () => {
     </ToolLayout>
   );
 };
-

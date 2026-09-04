@@ -1,33 +1,7 @@
-import { PDFDocument } from 'pdf-lib';
 import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib';
 import JSZip from 'jszip';
 import { readFileAsArrayBuffer } from './formatters';
 
-/**
- * Returns page count of a given PDF file
- * Dynamically loads PDF.js script into the browser on-demand
- */
-async function loadPdfJs() {
-  if (window.pdfjsLib) {
-    return window.pdfjsLib;
-  }
-
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-    script.onload = () => {
-      if (window.pdfjsLib) {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        resolve(window.pdfjsLib);
-      } else {
-        reject(new Error('PDF.js library failed to initialize.'));
-      }
-    };
-    script.onerror = () => reject(new Error('Failed to load PDF.js renderer.'));
-    document.head.appendChild(script);
-  });
-}
 
 /**
  * Returns detailed info & page count of a given PDF file
@@ -38,8 +12,7 @@ export async function getPdfInfo(file) {
     const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
     return {
       pageCount: pdfDoc.getPageCount(),
-      title: pdfDoc.getTitle() || file.name
-      title: pdfDoc.getTitle() || '',
+      title: pdfDoc.getTitle() || file.name,
       author: pdfDoc.getAuthor() || '',
       subject: pdfDoc.getSubject() || '',
       keywords: pdfDoc.getKeywords() || '',
@@ -168,7 +141,6 @@ export async function splitPdf(file, options = {}, onProgress = null) {
 /**
  * Helper to parse human page range strings e.g. "1-3, 5, 8-10"
  */
-function parsePageRange(rangeStr, maxPages) {
 export function parsePageRange(rangeStr, maxPages) {
   if (!rangeStr || !rangeStr.trim()) return [];
   const parts = rangeStr.split(',');
@@ -238,37 +210,63 @@ export async function compressPdf(file, options = {}, onProgress = null) {
 }
 
 /**
- * Rotates pages in a PDF document by 90, 180, or 270 degrees
+ * Rotates pages in a PDF document by 90, 180, or 270 degrees.
+ * Supports global angle or per-page rotation mapping { [pageNum]: degrees }.
  */
-export async function rotatePdf(file, rotationDegrees = 90, pageRange = '', onProgress = null) {
+export async function rotatePdf(file, rotationInput = 90, pageRange = '', onProgress = null) {
   const buffer = await readFileAsArrayBuffer(file);
   if (onProgress) onProgress(30);
 
   const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
   const totalPages = pdfDoc.getPageCount();
-  const targetPages = pageRange ? parsePageRange(pageRange, totalPages) : null;
+  const pages = pdfDoc.getPages();
 
   if (onProgress) onProgress(60);
 
-  const pages = pdfDoc.getPages();
-  pages.forEach((page, idx) => {
-    const pageNum = idx + 1;
-    if (!targetPages || targetPages.includes(pageNum)) {
-      const currentRotation = page.getRotation().angle;
-      page.setRotation(degrees((currentRotation + rotationDegrees) % 360));
-    }
-  });
+  if (typeof rotationInput === 'object' && rotationInput !== null && !Array.isArray(rotationInput)) {
+    // Map of { [pageNum]: degrees }
+    pages.forEach((page, idx) => {
+      const pageNum = idx + 1;
+      if (rotationInput[pageNum] !== undefined) {
+        const addedRotation = rotationInput[pageNum] || 0;
+        const currentRotation = page.getRotation().angle;
+        page.setRotation(degrees((currentRotation + addedRotation) % 360));
+      }
+    });
+  } else if (Array.isArray(rotationInput)) {
+    // Array of { page: number, angle: number }
+    const map = {};
+    rotationInput.forEach(item => { map[item.page] = item.angle; });
+    pages.forEach((page, idx) => {
+      const pageNum = idx + 1;
+      if (map[pageNum] !== undefined) {
+        const addedRotation = map[pageNum] || 0;
+        const currentRotation = page.getRotation().angle;
+        page.setRotation(degrees((currentRotation + addedRotation) % 360));
+      }
+    });
+  } else {
+    // Single number rotation applied to targetPages or all
+    const rotationDegrees = typeof rotationInput === 'number' ? rotationInput : 90;
+    const targetPages = pageRange ? parsePageRange(pageRange, totalPages) : null;
+    pages.forEach((page, idx) => {
+      const pageNum = idx + 1;
+      if (!targetPages || targetPages.includes(pageNum)) {
+        const currentRotation = page.getRotation().angle;
+        page.setRotation(degrees((currentRotation + rotationDegrees) % 360));
+      }
+    });
+  }
 
   if (onProgress) onProgress(85);
   const bytes = await pdfDoc.save();
   const blob = new Blob([bytes], { type: 'application/pdf' });
 
   if (onProgress) onProgress(100);
-  const baseName = file.name.replace(/\.[^/.]+$/, '');
   return {
     blob,
     size: blob.size,
-    name: `${baseName}-rotated.pdf`,
+    name: 'rotated.pdf',
     pageCount: totalPages
   };
 }
@@ -284,7 +282,9 @@ export async function reorderPdf(file, newOrderArray, onProgress = null) {
   const newDoc = await PDFDocument.create();
 
   // 0-indexed page indices in the requested sequence
-  const indices = newOrderArray.map(n => n - 1);
+  const indices = newOrderArray.map(n => n - 1).filter(idx => idx >= 0 && idx < srcDoc.getPageCount());
+  if (indices.length === 0) throw new Error('No valid pages in the specified order.');
+
   if (onProgress) onProgress(60);
 
   const copiedPages = await newDoc.copyPages(srcDoc, indices);
@@ -295,11 +295,10 @@ export async function reorderPdf(file, newOrderArray, onProgress = null) {
   const blob = new Blob([bytes], { type: 'application/pdf' });
 
   if (onProgress) onProgress(100);
-  const baseName = file.name.replace(/\.[^/.]+$/, '');
   return {
     blob,
     size: blob.size,
-    name: `${baseName}-reordered.pdf`,
+    name: 'reordered.pdf',
     pageCount: newDoc.getPageCount()
   };
 }
@@ -555,12 +554,27 @@ export async function unlockPdf(file, password = '', onProgress = null) {
 }
 
 /**
- * Converts image files (JPG, PNG, WebP) into a single PDF document
+ * Converts image files (JPG, PNG, WebP) into a single PDF document with customizable layout options
  */
 export async function imagesToPdf(files, options = {}, onProgress = null) {
   if (!files || files.length === 0) {
     throw new Error('Please select at least one image to convert.');
   }
+
+  const {
+    pageSize = 'a4', // 'a4', 'letter', 'original'
+    orientation = 'auto', // 'auto', 'portrait', 'landscape'
+    imageFit = 'fit', // 'fit', 'fill', 'original'
+    margin = 'small' // 'none', 'small', 'medium', 'large'
+  } = options;
+
+  const marginMap = {
+    none: 0,
+    small: 18,
+    medium: 36,
+    large: 54
+  };
+  const marginPt = typeof margin === 'number' ? margin : (marginMap[margin] ?? 18);
 
   const pdfDoc = await PDFDocument.create();
 
@@ -582,13 +596,61 @@ export async function imagesToPdf(files, options = {}, onProgress = null) {
       image = await convertImageViaCanvas(file, pdfDoc);
     }
 
-    // Add page matching image aspect ratio
-    const page = pdfDoc.addPage([image.width, image.height]);
+    const imgW = image.width;
+    const imgH = image.height;
+
+    let pageW, pageH;
+
+    if (pageSize === 'original') {
+      pageW = imgW + marginPt * 2;
+      pageH = imgH + marginPt * 2;
+    } else {
+      const baseW = pageSize === 'letter' ? 612 : 595.28;
+      const baseH = pageSize === 'letter' ? 792 : 841.89;
+
+      let isLandscape = false;
+      if (orientation === 'landscape') {
+        isLandscape = true;
+      } else if (orientation === 'portrait') {
+        isLandscape = false;
+      } else {
+        // 'auto'
+        isLandscape = imgW > imgH;
+      }
+
+      pageW = isLandscape ? Math.max(baseW, baseH) : Math.min(baseW, baseH);
+      pageH = isLandscape ? Math.min(baseW, baseH) : Math.max(baseW, baseH);
+    }
+
+    const availW = Math.max(10, pageW - marginPt * 2);
+    const availH = Math.max(10, pageH - marginPt * 2);
+
+    let drawW, drawH;
+
+    if (imageFit === 'original') {
+      drawW = imgW;
+      drawH = imgH;
+    } else if (imageFit === 'fill') {
+      const scale = Math.max(availW / imgW, availH / imgH);
+      drawW = imgW * scale;
+      drawH = imgH * scale;
+    } else {
+      // 'fit' (contain)
+      const scale = Math.min(availW / imgW, availH / imgH);
+      drawW = imgW * scale;
+      drawH = imgH * scale;
+    }
+
+    // Center image on the page
+    const drawX = marginPt + (availW - drawW) / 2;
+    const drawY = marginPt + (availH - drawH) / 2;
+
+    const page = pdfDoc.addPage([pageW, pageH]);
     page.drawImage(image, {
-      x: 0,
-      y: 0,
-      width: image.width,
-      height: image.height
+      x: drawX,
+      y: drawY,
+      width: drawW,
+      height: drawH
     });
 
     if (onProgress) {
@@ -604,7 +666,8 @@ export async function imagesToPdf(files, options = {}, onProgress = null) {
   return {
     blob,
     size: blob.size,
-    name: 'converted-images.pdf'
+    name: 'converted.pdf',
+    pageCount: files.length
   };
 }
 
@@ -642,18 +705,16 @@ async function convertImageViaCanvas(file, pdfDoc) {
 
 /**
  * Dynamically loads PDF.js script into the browser on-demand
- * Converts PDF pages into images (JPG or PNG)
  */
-async function loadPdfJs() {
-  if (window.pdfjsLib) {
+export async function loadPdfJs() {
+  if (typeof window !== 'undefined' && window.pdfjsLib) {
     return window.pdfjsLib;
   }
-export async function pdfToImages(file, options = {}, onProgress = null) {
-  const format = options.format || 'image/jpeg';
-  const isPng = format === 'image/png';
-  const ext = isPng ? '.png' : '.jpg';
 
   return new Promise((resolve, reject) => {
+    if (typeof document === 'undefined') {
+      return reject(new Error('Browser DOM required for PDF.js.'));
+    }
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
     script.onload = () => {
@@ -671,75 +732,86 @@ export async function pdfToImages(file, options = {}, onProgress = null) {
 }
 
 /**
- * Converts PDF pages to high-resolution JPG images
+ * Converts PDF pages into real rendered images (PNG or JPG)
  */
-export async function pdfToJpg(file, options = {}, onProgress = null) {
+export async function pdfToImages(file, options = {}, onProgress = null) {
+  const format = options.format || 'image/png';
+  const isPng = format === 'image/png';
+  const ext = isPng ? '.png' : '.jpg';
+  const scale = options.scale || (isPng ? 2.0 : 1.8);
+  const quality = options.quality || 0.92;
+
   const pdfjsLib = await loadPdfJs();
   const buffer = await readFileAsArrayBuffer(file);
   const loadingTask = pdfjsLib.getDocument({ data: buffer });
   const pdf = await loadingTask.promise;
-  const numPages = pdf.numPages;
+  const totalPages = pdf.numPages;
 
-  if (numPages === 0) {
+  if (totalPages === 0) {
     throw new Error('The PDF document contains no pages.');
   }
-  if (numPages === 0) throw new Error('The PDF document contains no pages.');
+
+  // Parse page range if specified
+  const targetPages = options.pageRange
+    ? parsePageRange(options.pageRange, totalPages)
+    : Array.from({ length: totalPages }, (_, idx) => idx + 1);
+
+  if (targetPages.length === 0) {
+    throw new Error('No valid pages selected to render.');
+  }
 
   const baseName = file.name.replace(/\.[^/.]+$/, '');
   const imageBlobs = [];
 
-  for (let i = 1; i <= numPages; i++) {
-    const page = await pdf.getPage(i);
-    // 1.8x scale for sharp output
-    const viewport = page.getViewport({ scale: 1.8 });
+  for (let i = 0; i < targetPages.length; i++) {
+    const pageNum = targetPages[i];
+    const page = await pdf.getPage(pageNum);
+    const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');
     canvas.width = viewport.width;
     canvas.height = viewport.height;
     const canvasContext = canvas.getContext('2d');
 
-    // Fill white background for PDF page rendering
+    // Fill white background (crucial for transparent PDFs converted to JPG)
     canvasContext.fillStyle = '#ffffff';
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    if (!isPng) {
-      canvasContext.fillStyle = '#ffffff';
-      canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    }
 
     await page.render({ canvasContext, viewport }).promise;
 
     const blob = await new Promise((resolve) => {
-      canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.92);
-      canvas.toBlob((b) => resolve(b), format, 0.92);
+      canvas.toBlob((b) => resolve(b), format, quality);
     });
 
     imageBlobs.push({
-      page: i,
+      page: pageNum,
       blob,
-      name: `${baseName}-page-${i}.jpg`
-      name: `${baseName}-page-${i}${ext}`
+      name: `page-${pageNum}${ext}`
     });
 
+    // Cleanup canvas
+    canvas.width = 0;
+    canvas.height = 0;
+
     if (onProgress) {
-      onProgress(Math.round((i / numPages) * 85));
+      onProgress(Math.round(((i + 1) / targetPages.length) * 85));
     }
   }
 
-  // Single page: return single JPG
-  if (numPages === 1) {
+  // Single page rendered: return direct image download
+  if (imageBlobs.length === 1) {
     if (onProgress) onProgress(100);
     return {
       blob: imageBlobs[0].blob,
       size: imageBlobs[0].blob.size,
-      name: `${baseName}-page-1.jpg`,
-      name: `${baseName}-page-1${ext}`,
+      name: `page-${imageBlobs[0].page}${ext}`,
       isZip: false,
       pageCount: 1,
       previewUrl: URL.createObjectURL(imageBlobs[0].blob)
     };
   }
 
-  // Multiple pages: package into a ZIP
+  // Multiple pages: package into pdf-pages.zip
   const zip = new JSZip();
   imageBlobs.forEach((item) => {
     zip.file(item.name, item.blob);
@@ -757,9 +829,9 @@ export async function pdfToJpg(file, options = {}, onProgress = null) {
   return {
     blob: zipBlob,
     size: zipBlob.size,
-    name: `${baseName}-images.zip`,
+    name: 'pdf-pages.zip',
     isZip: true,
-    pageCount: numPages,
+    pageCount: imageBlobs.length,
     previewUrl: URL.createObjectURL(imageBlobs[0].blob)
   };
 }
